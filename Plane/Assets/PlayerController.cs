@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         {
             gravityInverted = !gravityInverted; //反転フラグを切り替え
             rb.gravityScale *= -1; //重力を反転
-            transform.Rotate(180f, 0f, 0f); //プレイヤーを上下反転
+            transform.Rotate(90f, 0f, 0f); //プレイヤーを上下反転
         }
 
 
