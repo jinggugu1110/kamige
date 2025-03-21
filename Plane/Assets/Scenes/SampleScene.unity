@@ -230,7 +230,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.303791
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -367,7 +367,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &1222308572
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -429,10 +429,11 @@ Transform:
   m_GameObject: {fileID: 1222308568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.15, y: -3.53, z: 0}
-  m_LocalScale: {x: 0.5858535, y: 0.68234694, z: 1}
+  m_LocalPosition: {x: -7.99, y: -3.66, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1675028126}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1222308574
@@ -447,8 +448,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392a2a9ae6cb7b443adb979952424739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  jumpForce: 2
+  moveSpeed: 5
+  jumpForce: 5
+  groundCheck: {fileID: 1675028126}
 --- !u!1 &1296274864
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +786,7 @@ GameObject:
   - component: {fileID: 1532944207}
   - component: {fileID: 1532944206}
   - component: {fileID: 1532944210}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tilemap
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1433,6 +1435,26 @@ Tilemap:
       m_TileIndex: 0
       m_TileSpriteIndex: 0
       m_TileMatrixIndex: 1
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -7, y: -4, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -3, y: -4, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
@@ -2649,17 +2671,17 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 172
+  - m_RefCount: 174
     m_Data: {fileID: 11400000, guid: d47efeef687eacf458e10fb5d215b911, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 172
+  - m_RefCount: 174
     m_Data: {fileID: 1629446190, guid: 54d1fc371f298c14d9f926c268cb95fb, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileMatrixArray:
-  - m_RefCount: 124
+  - m_RefCount: 126
     m_Data:
       e00: 1
       e01: 0
@@ -2696,7 +2718,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 172
+  - m_RefCount: 174
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -2763,6 +2785,14 @@ CompositeCollider2D:
     m_ColliderPaths:
     - - X: -50000000
         Y: -40000000
+      - X: -60000000
+        Y: -40000000
+      - X: -60000000
+        Y: -30000000
+      - X: -70000000
+        Y: -30000000
+      - X: -70000000
+        Y: -40000000
       - X: -90000000
         Y: -40000000
       - X: -90000000
@@ -2786,6 +2816,10 @@ CompositeCollider2D:
       - X: -20000000
         Y: -20000000
       - X: -20000000
+        Y: -30000000
+      - X: -30000000
+        Y: -30000000
+      - X: -30000000
         Y: -40000000
       - X: -40000000
         Y: -40000000
@@ -2821,6 +2855,10 @@ CompositeCollider2D:
     m_Paths:
     - - {x: -5.000029, y: -6}
       - {x: -5.000029, y: -4}
+      - {x: -6, y: -3.9999704}
+      - {x: -6.000029, y: -3}
+      - {x: -7, y: -3.0000293}
+      - {x: -7.0000296, y: -4}
       - {x: -9, y: -3.9999704}
       - {x: -9.00003, y: 0}
       - {x: -10, y: 0.0000294}
@@ -2832,7 +2870,9 @@ CompositeCollider2D:
       - {x: 3, y: -3.9999704}
       - {x: 2.999971, y: -2}
       - {x: -2, y: -2.0000293}
-      - {x: -2.0000293, y: -4}
+      - {x: -2.0000293, y: -3}
+      - {x: -3, y: -3.0000293}
+      - {x: -3.0000293, y: -4}
       - {x: -4, y: -4.000029}
       - {x: -3.999971, y: -6}
       - {x: 13, y: -5.999971}
@@ -2851,10 +2891,41 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 1532944204}
+--- !u!1 &1675028125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1675028126}
+  m_Layer: 0
+  m_Name: groundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1675028126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675028125}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1222308573}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1222308573}
   - {fileID: 519420032}
   - {fileID: 279206919}
-  - {fileID: 1222308573}
