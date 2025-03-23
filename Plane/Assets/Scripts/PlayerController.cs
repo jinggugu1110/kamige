@@ -3,20 +3,21 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float pl_moveSpeed = 5f;
-    public float pl_jumpForce = 10f;
+    public float pl_jumpForce = 5f;
 
     // 判定用Transform
     public Transform groundCheck;
+    public Transform topGroundCheck; // 逆重力時の地面判定
     public Transform leftCheck;
     public Transform rightCheck;
     public Transform topRightCheck;
     public Transform bottomRightCheck;
     public Transform topLeftCheck;
     public Transform bottomLeftCheck;
-    public Transform rightMidCheck; // RightCheckとTopRightCheckの間
-    public Transform rightLowCheck; // RightCheckとBottomRightCheckの間
-    public Transform leftMidCheck;  // LeftCheckとTopLeftCheckの間
-    public Transform leftLowCheck;  // LeftCheckとBottomLeftCheckの間
+    public Transform rightMidCheck;
+    public Transform rightLowCheck;
+    public Transform leftMidCheck;
+    public Transform leftLowCheck;
 
     private Rigidbody2D rb;
     private bool isJumping = false;
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private bool isBlockedLeftLow = false;
     private Vector3 initialPosition; // 初期位置を保存
 
+    // リスポーンに使う
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -56,13 +58,13 @@ public class PlayerController : MonoBehaviour
         isBlockedTopLeft = Physics2D.Raycast(topLeftCheck.position, Vector2.up, rayDistance, LayerMask.GetMask("Ground"));
         isBlockedBottomLeft = Physics2D.Raycast(bottomLeftCheck.position, Vector2.down, rayDistance, LayerMask.GetMask("Ground"));
 
-        //左右の中間
+        // 中間の判定（左右）
         isBlockedRightMid = Physics2D.Raycast(rightMidCheck.position, Vector2.right, rayDistance, LayerMask.GetMask("Ground"));
         isBlockedRightLow = Physics2D.Raycast(rightLowCheck.position, Vector2.right, rayDistance, LayerMask.GetMask("Ground"));
         isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, LayerMask.GetMask("Ground"));
         isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, LayerMask.GetMask("Ground"));
 
-        //左右の壁がある場合は移動を防ぐ
+        // 左右の壁がある場合は移動を防ぐ
         if ((isBlockedLeft || isBlockedLeftMid || isBlockedLeftLow) && moveInput < 0)
         {
             moveVelocity.x = 0;
@@ -74,22 +76,61 @@ public class PlayerController : MonoBehaviour
 
         rb.velocity = moveVelocity;
 
-        //地面判定（レイキャストを使用）
-        onGround = Physics2D.Raycast(groundCheck.position, Vector2.down, rayDistance, LayerMask.GetMask("Ground"));
-
-        //ジャンプ処理
-        if (Input.GetButtonDown("Jump") && onGround)
+        // 地面判定の切り替え（通常時は groundCheck、重力反転時は topGroundCheck）
+        if (rb.gravityScale > 0)
         {
-            rb.velocity = new Vector2(rb.velocity.x, pl_jumpForce);
-            isJumping = true;
-            onGround = false; // 空中にいるので false
+            onGround = Physics2D.Raycast(groundCheck.position, Vector2.down, rayDistance, LayerMask.GetMask("Ground"));
+        }
+        else
+        {
+            onGround = Physics2D.Raycast(topGroundCheck.position, Vector2.up, rayDistance, LayerMask.GetMask("Ground"));
         }
 
-        //画面外に出たらリスポーン
-        if (transform.position.y < -10f) // 例: Y座標が -10 以下になったら初期位置に戻す
+        // デバッグ用レイ表示
+        Debug.DrawRay(groundCheck.position, Vector2.down * rayDistance, Color.red);
+        Debug.DrawRay(topGroundCheck.position, Vector2.up * rayDistance, Color.blue);
+
+        if (onGround)
+        {
+            Debug.Log("プレイヤーは地面に接触している");
+        }
+
+        // ジャンプ処理の分岐
+        if (Input.GetButtonDown("Jump") && onGround)
+        {
+            if (rb.gravityScale > 0)
+            {
+                NormalJump();
+            }
+            else
+            {
+                GravityJump();
+            }
+        }
+
+        // 画面外に出たらリスポーン
+        if (transform.position.y < -10f)
         {
             Respawn();
         }
+    }
+
+    // 通常ジャンプ処理
+    private void NormalJump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, pl_jumpForce);
+        isJumping = true;
+        onGround = false;
+        Debug.Log("通常ジャンプ");
+    }
+
+    // 反転ジャンプ処理
+    private void GravityJump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, -pl_jumpForce); // 下方向（反転した「ジャンプ」）
+        isJumping = true;
+        onGround = false;
+        Debug.Log("重力反転ジャンプ");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -98,7 +139,7 @@ public class PlayerController : MonoBehaviour
         {
             foreach (ContactPoint2D contact in collision.contacts)
             {
-                if (contact.normal.y > 0.5f)
+                if ((rb.gravityScale > 0 && contact.normal.y > 0.5f) || (rb.gravityScale < 0 && contact.normal.y < -0.5f))
                 {
                     onGround = true;
                     isJumping = false;
@@ -106,13 +147,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Spike に当たったらリスポーン
         if (collision.gameObject.CompareTag("Spikes"))
         {
             Respawn();
         }
     }
 
+    // Groundたぐのついたobjectとの当たり判定
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -124,7 +165,7 @@ public class PlayerController : MonoBehaviour
     // 初期位置に戻す処理
     private void Respawn()
     {
-        transform.position = initialPosition; // 初期位置に戻す
-        rb.velocity = Vector2.zero; // 動きをリセット
+        transform.position = initialPosition;
+        rb.velocity = Vector2.zero;
     }
 }
