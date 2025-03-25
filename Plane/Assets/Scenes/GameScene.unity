@@ -3578,9 +3578,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1811908339}
   - component: {fileID: 1811908338}
-  - component: {fileID: 1811908337}
   - component: {fileID: 1811908340}
   - component: {fileID: 1811908341}
+  - component: {fileID: 1811908342}
   m_Layer: 0
   m_Name: Goal
   m_TagString: Finish
@@ -3588,19 +3588,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1811908337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1811908336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf7eb3bcdefc2ec49b7f22c57476ad61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  charaName: Player
 --- !u!212 &1811908338
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3740,6 +3727,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1811908342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811908336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7eb3bcdefc2ec49b7f22c57476ad61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1222308573}
 --- !u!1 &1848451995
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,13 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class Goal : MonoBehaviour
 {
-    public string charaName = "Player";
-
-    void OnCollisionEnter(Collision col)
+    public Transform player;
+    private Rigidbody2D targetRb;
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (col.gameObject.name == charaName)
-        {
-            SceneManager.LoadScene("Result");
+        if (other.CompareTag("Player"))
+         {
+            if (targetRb == null) // ‰‰ñÚG‚ÉRigidbody2D‚ğæ“¾
+            {
+                targetRb = other.GetComponent<Rigidbody2D>();
+                SceneManager.LoadScene("Result");
+            }
+           
         }
+        
     }
 }
