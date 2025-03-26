@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     private bool isBlockedLeftLow = false;
     private Vector3 initialPosition; // 初期位置を保存
 
-    // リスポーンに使う
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -43,117 +42,145 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        CheckCollisions(); // 壁判定を先に行う
+        HandleMovement();
+        HandleJump();
+        CheckGround();
+    }
+
+    private void CheckCollisions()
+    {
+        float rayDistance = 0.1f;
+        LayerMask groundLayer = LayerMask.GetMask("Ground");
+
+        isBlockedLeft = Physics2D.Raycast(leftCheck.position, Vector2.left, rayDistance, groundLayer);
+        isBlockedRight = Physics2D.Raycast(rightCheck.position, Vector2.right, rayDistance, groundLayer);
+        isBlockedTopRight = Physics2D.Raycast(topRightCheck.position, Vector2.up, rayDistance, groundLayer);
+        isBlockedBottomRight = Physics2D.Raycast(bottomRightCheck.position, Vector2.down, rayDistance, groundLayer);
+        isBlockedTopLeft = Physics2D.Raycast(topLeftCheck.position, Vector2.up, rayDistance, groundLayer);
+        isBlockedBottomLeft = Physics2D.Raycast(bottomLeftCheck.position, Vector2.down, rayDistance, groundLayer);
+        isBlockedRightMid = Physics2D.Raycast(rightMidCheck.position, Vector2.right, rayDistance, groundLayer);
+        isBlockedRightLow = Physics2D.Raycast(rightLowCheck.position, Vector2.right, rayDistance, groundLayer);
+        isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, groundLayer);
+        isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, groundLayer);
+    }
+
+    private void HandleMovement()
+    {
         float moveInput = Input.GetAxisRaw("Horizontal");
-        Vector2 moveVelocity = new Vector2(moveInput * pl_moveSpeed, rb.velocity.y);
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        Vector2 moveVelocity = rb.velocity;
 
-        float rayDistance = 0.1f; // レイの距離
-
-        // 壁の判定（左右）
-        isBlockedLeft = Physics2D.Raycast(leftCheck.position, Vector2.left, rayDistance, LayerMask.GetMask("Ground"));
-        isBlockedRight = Physics2D.Raycast(rightCheck.position, Vector2.right, rayDistance, LayerMask.GetMask("Ground"));
-
-        // 角の判定（上下）
-        isBlockedTopRight = Physics2D.Raycast(topRightCheck.position, Vector2.up, rayDistance, LayerMask.GetMask("Ground"));
-        isBlockedBottomRight = Physics2D.Raycast(bottomRightCheck.position, Vector2.down, rayDistance, LayerMask.GetMask("Ground"));
-        isBlockedTopLeft = Physics2D.Raycast(topLeftCheck.position, Vector2.up, rayDistance, LayerMask.GetMask("Ground"));
-        isBlockedBottomLeft = Physics2D.Raycast(bottomLeftCheck.position, Vector2.down, rayDistance, LayerMask.GetMask("Ground"));
-
-        // 中間の判定（左右）
-        isBlockedRightMid = Physics2D.Raycast(rightMidCheck.position, Vector2.right, rayDistance, LayerMask.GetMask("Ground"));
-        isBlockedRightLow = Physics2D.Raycast(rightLowCheck.position, Vector2.right, rayDistance, LayerMask.GetMask("Ground"));
-        isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, LayerMask.GetMask("Ground"));
-        isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, LayerMask.GetMask("Ground"));
-
-        // 左右の壁がある場合は移動を防ぐ
-        if ((isBlockedLeft || isBlockedLeftMid || isBlockedLeftLow) && moveInput < 0)
+        if (rb.gravityScale == 1 || rb.gravityScale == -1)
         {
-            moveVelocity.x = 0;
-        }
-        if ((isBlockedRight || isBlockedRightMid || isBlockedRightLow) && moveInput > 0)
-        {
-            moveVelocity.x = 0;
-        }
-
-        rb.velocity = moveVelocity;
-
-        // 地面判定の切り替え（通常時は groundCheck、重力反転時は topGroundCheck）
-        if (rb.gravityScale > 0)
-        {
-            onGround = Physics2D.Raycast(groundCheck.position, Vector2.down, rayDistance, LayerMask.GetMask("Ground"));
-        }
-        else
-        {
-            onGround = Physics2D.Raycast(topGroundCheck.position, Vector2.up, rayDistance, LayerMask.GetMask("Ground"));
-        }
-
-        // デバッグ用レイ表示
-        Debug.DrawRay(groundCheck.position, Vector2.down * rayDistance, Color.red);
-        Debug.DrawRay(topGroundCheck.position, Vector2.up * rayDistance, Color.blue);
-
-        if (onGround)
-        {
-            Debug.Log("プレイヤーは地面に接触している");
-        }
-
-        // ジャンプ処理の分岐
-        if (Input.GetButtonDown("Jump") && onGround)
-        {
-            if (rb.gravityScale > 0)
+            if ((isBlockedLeft && moveInput < 0) || (isBlockedRight && moveInput > 0))
             {
-                NormalJump();
+                moveVelocity.x = 0;
             }
             else
             {
-                GravityJump();
+                moveVelocity.x = moveInput * pl_moveSpeed;
+            }
+        }
+        else if (rb.gravityScale == 0)
+        {
+            if ((isBlockedTopLeft || isBlockedTopRight) && verticalInput > 0)
+            {
+                moveVelocity.y = 0;
+            }
+            else if ((isBlockedBottomLeft || isBlockedBottomRight) && verticalInput < 0)
+            {
+                moveVelocity.y = 0;
+            }
+            else
+            {
+                moveVelocity.y = verticalInput * pl_moveSpeed;
             }
         }
 
-        // 画面外に出たらリスポーン
-        if (transform.position.y < -10f)
+        rb.velocity = moveVelocity;
+    }
+
+    private void HandleJump()
+    {
+        if (onGround && Input.GetButtonDown("Jump"))
         {
-            Respawn();
+            float jumpForce = pl_jumpForce;
+            float rotationZ = transform.eulerAngles.z;
+            Vector2 jumpVelocity = rb.velocity;
+
+            if (rb.gravityScale == 1) // 通常のジャンプ（上方向）
+            {
+                if (!isBlockedTopLeft && !isBlockedTopRight)
+                {
+                    jumpVelocity.y = jumpForce;
+                }
+            }
+            else if (rb.gravityScale == -1) // 逆重力ジャンプ（下方向）
+            {
+                if (!isBlockedBottomLeft && !isBlockedBottomRight)
+                {
+                    jumpVelocity.y = -jumpForce;
+                }
+            }
+            else if (rb.gravityScale == 0) // 左右重力時（90° or 270°）
+            {
+                if (rotationZ == 90 && !isBlockedRight)
+                {
+                    jumpVelocity.x = jumpForce;
+                }
+                else if (rotationZ == 270 && !isBlockedLeft)
+                {
+                    jumpVelocity.x = -jumpForce;
+                }
+            }
+
+            rb.velocity = jumpVelocity;
+            onGround = false;
+            isJumping = true;
         }
     }
 
-    // 通常ジャンプ処理
-    private void NormalJump()
+    private void CheckGround()
     {
-        rb.velocity = new Vector2(rb.velocity.x, pl_jumpForce);
-        isJumping = true;
-        onGround = false;
-        Debug.Log("通常ジャンプ");
-    }
+        float rotationZ = transform.eulerAngles.z;
+        float rayDistance = 0.1f;
+        LayerMask groundLayer = LayerMask.GetMask("Ground");
 
-    // 反転ジャンプ処理
-    private void GravityJump()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, -pl_jumpForce); // 下方向（反転した「ジャンプ」）
-        isJumping = true;
-        onGround = false;
-        Debug.Log("重力反転ジャンプ");
+        if (rb.gravityScale > 0) // 通常の重力（下向き）
+        {
+            onGround = Physics2D.Raycast(groundCheck.position, Vector2.down, rayDistance, groundLayer) ||
+                       Physics2D.Raycast(bottomRightCheck.position, Vector2.down, rayDistance, groundLayer) ||
+                       Physics2D.Raycast(bottomLeftCheck.position, Vector2.down, rayDistance, groundLayer);
+        }
+        else if (rb.gravityScale < 0) // 逆重力（上向き）
+        {
+            onGround = Physics2D.Raycast(topGroundCheck.position, Vector2.up, rayDistance, groundLayer) ||
+                       Physics2D.Raycast(topRightCheck.position, Vector2.up, rayDistance, groundLayer) ||
+                       Physics2D.Raycast(topLeftCheck.position, Vector2.up, rayDistance, groundLayer);
+        }
+        else if (rb.gravityScale == 0) // 左右重力
+        {
+            if (rotationZ == 90)
+            {
+                onGround = isBlockedLeft;
+            }
+            else if (rotationZ == 270)
+            {
+                onGround = isBlockedRight;
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            foreach (ContactPoint2D contact in collision.contacts)
-            {
-                if ((rb.gravityScale > 0 && contact.normal.y > 0.5f) || (rb.gravityScale < 0 && contact.normal.y < -0.5f))
-                {
-                    onGround = true;
-                    isJumping = false;
-                }
-            }
-        }
-
-        if (collision.gameObject.CompareTag("Spikes"))
-        {
-            Respawn();
+            onGround = true;
+            isJumping = false;
         }
     }
 
-    // Groundたぐのついたobjectとの当たり判定
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -162,7 +189,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 初期位置に戻す処理
     private void Respawn()
     {
         transform.position = initialPosition;
