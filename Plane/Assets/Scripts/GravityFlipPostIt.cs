@@ -1,72 +1,13 @@
-//using UnityEngine;
-
-//public class GravityFlipPostIt : MonoBehaviour
-//{
-//    private float touchTime = 0f; // 触れている時間
-//    public float activationTime = 5f; // 5秒間触れ続けたら発動
-//    private Rigidbody2D targetRb; // 影響を与えるオブジェクトのRigidbody2D
-//    private Transform attachedObject; // 付箋が付くオブジェクト
-//    private bool isGravityFlipped = false; // 重力が反転しているか
-
-//    private void OnTriggerStay2D(Collider2D other)
-//    {
-//        if (other.CompareTag("Player") || other.CompareTag("Attachable")) // プレイヤーまたは付箋を貼れるオブジェクト
-//        {
-//            if (targetRb == null) // 初回接触時にRigidbody2Dを取得
-//            {
-//                targetRb = other.GetComponent<Rigidbody2D>();
-//                attachedObject = other.transform; // 付箋を付ける対象を記録
-//                transform.SetParent(attachedObject); // 付箋をオブジェクトに追従させる
-//            }
-
-//            touchTime += Time.deltaTime;
-
-//            if (touchTime >= activationTime && !isGravityFlipped)
-//            {
-//                ActivateGravityFlip();
-//            }
-//        }
-//    }
-
-//    private void OnTriggerExit2D(Collider2D other)
-//    {
-//        if (other.CompareTag("Player") || other.CompareTag("Attachable"))
-//        {
-//            touchTime = 0f; // 離れたらカウントリセット
-//            transform.SetParent(null); // 付箋の親子関係を解除
-
-//            if (isGravityFlipped) // 重力反転が有効なら元に戻す
-//            {
-//                targetRb.gravityScale *= -1;
-//                isGravityFlipped = false;
-//                Debug.Log("重力が元に戻った！");
-//            }
-
-//            targetRb = null; // 参照リセット
-//        }
-//    }
-
-//    private void ActivateGravityFlip()
-//    {
-//        if (targetRb != null)
-//        {
-//            targetRb.gravityScale *= -1; // 重力反転
-//            isGravityFlipped = true;
-//            Debug.Log("重力反転付箋が発動！");
-//        }
-//    }
-//}
-
 using UnityEngine;
 
 public class GravityFlipPostIt : MonoBehaviour
 {
+    public float activationTime = 1.0f; // 発動までの時間
+    private float touchTime = 0.0f;
     private Rigidbody2D targetRb;
-    private float touchTime = 0f;
-    public float activationTime = 5f;
     private bool isGravityFlipped = false;
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") || other.CompareTag("Attachable"))
         {
@@ -75,15 +16,23 @@ public class GravityFlipPostIt : MonoBehaviour
                 targetRb = other.GetComponent<Rigidbody2D>();
                 if (targetRb != null)
                 {
-                    transform.SetParent(targetRb.transform); // 付箋をプレイヤーやオブジェクトにくっつける
+                    transform.SetParent(targetRb.transform);
                 }
             }
+        }
+    }
 
-            touchTime += Time.deltaTime;
-
-            if (touchTime >= activationTime)
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if ((other.CompareTag("Player") || other.CompareTag("Attachable")) && targetRb != null)
+        {
+            if (!isGravityFlipped) // すでに発動済みなら処理しない
             {
-                ActivateGravityFlip();
+                touchTime += Time.deltaTime; // プレイヤーが静止していても時間が進む
+                if (touchTime >= activationTime)
+                {
+                    ActivateGravityFlip();
+                }
             }
         }
     }
@@ -92,10 +41,13 @@ public class GravityFlipPostIt : MonoBehaviour
     {
         if (other.CompareTag("Player") || other.CompareTag("Attachable"))
         {
-            touchTime = 0f; // 離れたらカウントリセット
-            ResetGravity(); // 重力を元に戻す
-            targetRb = null;
-            transform.SetParent(null); // 付箋を元の状態に戻す
+            if (other.GetComponent<Rigidbody2D>() == targetRb)
+            {
+                ResetGravity();
+                transform.SetParent(null);
+                targetRb = null;
+                touchTime = 0.0f;
+            }
         }
     }
 
@@ -109,37 +61,37 @@ public class GravityFlipPostIt : MonoBehaviour
         }
     }
 
-    public void UpdateGravityBasedOnRotation(float rotationZ)
-    {
-        if (targetRb != null)
-        {
-            switch ((int)rotationZ)
-            {
-                case 0:
-                    targetRb.gravityScale = -1; // 上向き
-                    break;
-                case 90:
-                    targetRb.gravityScale = 0; // 右向き（無重力）
-                    targetRb.velocity = new Vector2(3f, 0f); // 右に移動（仮）
-                    break;
-                case 180:
-                    targetRb.gravityScale = 1; // 下向き（通常）
-                    break;
-                case 270:
-                    targetRb.gravityScale = 0; // 左向き（無重力）
-                    targetRb.velocity = new Vector2(-3f, 0f); // 左に移動（仮）
-                    break;
-            }
-            Debug.Log("重力方向変更: " + targetRb.gravityScale);
-        }
-    }
-
     private void ResetGravity()
     {
         if (targetRb != null)
         {
-            targetRb.gravityScale = 1; // 通常の重力に戻す
+            targetRb.gravityScale = 1.0f; // 重力を元に戻す
             isGravityFlipped = false;
+            Debug.Log("重力反転解除");
+        }
+    }
+
+    public void UpdateGravityBasedOnRotation(float rotationZ)
+    {
+        if (targetRb == null) return;
+
+        if (rotationZ == 0)
+        {
+            targetRb.gravityScale = -1.0f; // 上方向に重力
+        }
+        else if (rotationZ == 90)
+        {
+            targetRb.gravityScale = 0.0f;
+            targetRb.velocity = new Vector2(-9.8f, targetRb.velocity.y); // 左方向
+        }
+        else if (rotationZ == 180)
+        {
+            targetRb.gravityScale = 1.0f; // 下方向（通常の重力）
+        }
+        else if (rotationZ == 270)
+        {
+            targetRb.gravityScale = 0.0f;
+            targetRb.velocity = new Vector2(9.8f, targetRb.velocity.y); // 右方向
         }
     }
 }
