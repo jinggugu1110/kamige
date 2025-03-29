@@ -6,6 +6,7 @@ public class GravityFlipPostIt : MonoBehaviour
     private float touchTime = 0.0f;
     private Rigidbody2D targetRb;
     private bool isGravityFlipped = false;
+    private float horizontalGravity = 9.8f; // X方向の重力
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -81,8 +82,7 @@ public class GravityFlipPostIt : MonoBehaviour
         }
         else if (rotationZ == 90)
         {
-            targetRb.gravityScale = 0.0f;
-            targetRb.velocity = new Vector2(-9.8f, targetRb.velocity.y); // 左方向
+            targetRb.gravityScale = 0.0f; // 重力を無効化
         }
         else if (rotationZ == 180)
         {
@@ -90,8 +90,23 @@ public class GravityFlipPostIt : MonoBehaviour
         }
         else if (rotationZ == 270)
         {
-            targetRb.gravityScale = 0.0f;
-            targetRb.velocity = new Vector2(9.8f, targetRb.velocity.y); // 右方向
+            targetRb.gravityScale = 0.0f; // 重力を無効化
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (targetRb == null) return;
+
+        float rotationZ = transform.eulerAngles.z;
+
+        if (rotationZ == 90) // 左方向重力
+        {
+            targetRb.velocity += new Vector2(-horizontalGravity * Time.fixedDeltaTime, 0);
+        }
+        else if (rotationZ == 270) // 右方向重力
+        {
+            targetRb.velocity += new Vector2(horizontalGravity * Time.fixedDeltaTime, 0);
         }
     }
 }
