@@ -5,9 +5,9 @@ public class PlayerController : MonoBehaviour
     public float pl_moveSpeed = 5f;
     public float pl_jumpForce = 10f;
 
-    // ”»’è—pTransform
+    // ï¿½ï¿½ï¿½ï¿½pTransform
     public Transform groundCheck;
-    public Transform topGroundCheck; // ‹td—Í‚Ì’n–Ê”»’è
+    public Transform topGroundCheck; // ï¿½tï¿½dï¿½Íï¿½ï¿½Ì’nï¿½Ê”ï¿½ï¿½ï¿½
     public Transform leftCheck;
     public Transform rightCheck;
     public Transform topRightCheck;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     public Transform leftMidCheck;
     public Transform leftLowCheck;
 
-    // 90“x‰ñ“]‚µ‚½ GroundChecki¶‰Ed—Í—pj
+    // 90ï¿½xï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ GroundCheckï¿½iï¿½ï¿½ï¿½Eï¿½dï¿½Í—pï¿½j
     public Transform sideGroundCheck;
     public Transform sideTopGroundCheck;
     public Transform sideLeftCheck;
@@ -70,13 +70,13 @@ public class PlayerController : MonoBehaviour
     {
         float moveInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
-        Vector2 moveVelocity = rb.velocity;
+        Vector2 moveVelocity = rb.linearVelocity;
 
-        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í
+        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ï¿½ã‰ºï¿½dï¿½ï¿½
         {
             moveVelocity.x = moveInput * pl_moveSpeed;
 
-            // ¶‰E•Ç”»’è‚ğ“K—p
+            // ï¿½ï¿½ï¿½Eï¿½Ç”ï¿½ï¿½ï¿½ï¿½Kï¿½p
             if ((isBlockedLeft || isBlockedLeftMid || isBlockedLeftLow) && moveInput < 0)
             {
                 moveVelocity.x = 0;
@@ -86,11 +86,11 @@ public class PlayerController : MonoBehaviour
                 moveVelocity.x = 0;
             }
         }
-        else if (rb.gravityScale == 0) // ¶‰Ed—Í
+        else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½ï¿½
         {
             moveVelocity.y = verticalInput * pl_moveSpeed;
 
-            // ã‰º•Ç”»’è‚ğ“K—p
+            // ï¿½ã‰ºï¿½Ç”ï¿½ï¿½ï¿½ï¿½Kï¿½p
             if ((isBlockedTopLeft || isBlockedTopRight) && verticalInput > 0)
             {
                 moveVelocity.y = 0;
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        rb.velocity = moveVelocity;
+        rb.linearVelocity = moveVelocity;
     }
 
     private void HandleJump()
@@ -109,29 +109,29 @@ public class PlayerController : MonoBehaviour
         if (onGround && Input.GetButtonDown("Jump"))
         {
             float rotationZ = transform.eulerAngles.z;
-            Vector2 jumpVelocity = rb.velocity;
+            Vector2 jumpVelocity = rb.linearVelocity;
 
-            if (rb.gravityScale == 1) // ’Êí‚ÌƒWƒƒƒ“ƒviã•ûŒüj
+            if (rb.gravityScale == 1) // ï¿½Êï¿½ÌƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
             {
                 jumpVelocity.y = pl_jumpForce;
             }
-            else if (rb.gravityScale == -1) // ‹td—ÍƒWƒƒƒ“ƒvi‰º•ûŒüj
+            else if (rb.gravityScale == -1) // ï¿½tï¿½dï¿½ÍƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
             {
                 jumpVelocity.y = -pl_jumpForce;
             }
-            else if (rb.gravityScale == 0) // ¶‰Ed—Í
+            else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Íï¿½
             {
-                if (rotationZ == 90) // ‰EŒü‚«
+                if (rotationZ == 90) // ï¿½Eï¿½ï¿½ï¿½ï¿½
                 {
                     jumpVelocity.x = pl_jumpForce;
                 }
-                else if (rotationZ == 270) // ¶Œü‚«
+                else if (rotationZ == 270) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 {
                     jumpVelocity.x = -pl_jumpForce;
                 }
             }
 
-            rb.velocity = jumpVelocity;
+            rb.linearVelocity = jumpVelocity;
             onGround = false;
             isJumping = true;
         }
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
         float rayDistance = 0.1f;
         LayerMask groundLayer = LayerMask.GetMask("Ground");
 
-        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í‚Ì‚Ì‚İ
+        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ï¿½ã‰ºï¿½dï¿½Í‚Ìï¿½ï¿½Ì‚ï¿½
         {
             isBlockedLeft = Physics2D.Raycast(leftCheck.position, Vector2.left, rayDistance, groundLayer);
             isBlockedRight = Physics2D.Raycast(rightCheck.position, Vector2.right, rayDistance, groundLayer);
@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
             isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, groundLayer);
             isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, groundLayer);
         }
-        else if (rb.gravityScale == 0) // ¶‰Ed—Í‚Ì‚Ì‚İ
+        else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Í‚Ìï¿½ï¿½Ì‚ï¿½
         {
             isBlockedTopLeft = Physics2D.Raycast(sideTopLeftCheck.position, Vector2.up, rayDistance, groundLayer);
             isBlockedTopRight = Physics2D.Raycast(sideTopRightCheck.position, Vector2.up, rayDistance, groundLayer);
@@ -172,21 +172,21 @@ public class PlayerController : MonoBehaviour
     //        float rotationZ = transform.eulerAngles.z;
     //        Vector2 jumpVelocity = rb.velocity;
 
-    //        if (rb.gravityScale == 1) // ’Êí‚ÌƒWƒƒƒ“ƒviã•ûŒüj
+    //        if (rb.gravityScale == 1) // ï¿½Êï¿½ÌƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
     //        {
     //            jumpVelocity.y = pl_jumpForce;
     //        }
-    //        else if (rb.gravityScale == -1) // ‹td—ÍƒWƒƒƒ“ƒvi‰º•ûŒüj
+    //        else if (rb.gravityScale == -1) // ï¿½tï¿½dï¿½ÍƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
     //        {
     //            jumpVelocity.y = -pl_jumpForce;
     //        }
-    //        else if (rb.gravityScale == 0) // ¶‰Ed—Í
+    //        else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Íï¿½
     //        {
-    //            if (rotationZ == 90) // ‰EŒü‚«
+    //            if (rotationZ == 90) // ï¿½Eï¿½ï¿½ï¿½ï¿½
     //            {
     //                jumpVelocity.x = pl_jumpForce;
     //            }
-    //            else if (rotationZ == 270) // ¶Œü‚«
+    //            else if (rotationZ == 270) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     //            {
     //                jumpVelocity.x = -pl_jumpForce;
     //            }
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
     //        rb.velocity = jumpVelocity;
     //        onGround = false;
     //        isJumping = true;
-    //        Debug.Log("ƒWƒƒƒ“ƒvÀs: " + jumpVelocity);
+    //        Debug.Log("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½s: " + jumpVelocity);
     //    }
     //}
 
@@ -206,12 +206,12 @@ public class PlayerController : MonoBehaviour
     //    float rayDistance = 0.1f;
     //    LayerMask groundLayer = LayerMask.GetMask("Ground");
 
-    //    if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í
+    //    if (rb.gravityScale == 1 || rb.gravityScale == -1) // ï¿½ã‰ºï¿½dï¿½Íï¿½
     //    {
     //        onGround = Physics2D.Raycast(groundCheck.position, Vector2.down, rayDistance, groundLayer) ||
     //                   Physics2D.Raycast(topGroundCheck.position, Vector2.up, rayDistance, groundLayer);
     //    }
-    //    else if (rb.gravityScale == 0) // ¶‰Ed—Í
+    //    else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Íï¿½
     //    {
     //        onGround = Physics2D.Raycast(sideGroundCheck.position, Vector2.left, rayDistance, groundLayer) ||
     //                   Physics2D.Raycast(sideTopGroundCheck.position, Vector2.right, rayDistance, groundLayer);
@@ -251,6 +251,6 @@ public class PlayerController : MonoBehaviour
     private void Respawn()
     {
         transform.position = initialPosition;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
     }
 }
