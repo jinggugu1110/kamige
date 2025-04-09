@@ -1,3 +1,260 @@
+//using UnityEngine;
+
+//public class PlayerController : MonoBehaviour
+//{
+//    public float pl_moveSpeed = 5f;
+//    public float pl_jumpForce = 10f;
+
+//    // ”»’è—pTransform
+//    public Transform groundCheck;
+//    public Transform topGroundCheck; // ‹td—Í‚Ì’n–Ê”»’è
+//    public Transform leftCheck;
+//    public Transform rightCheck;
+//    public Transform topRightCheck;
+//    public Transform bottomRightCheck;
+//    public Transform topLeftCheck;
+//    public Transform bottomLeftCheck;
+//    public Transform rightMidCheck;
+//    public Transform rightLowCheck;
+//    public Transform leftMidCheck;
+//    public Transform leftLowCheck;
+
+//    // 90“x‰ñ“]‚µ‚½ GroundChecki¶‰Ed—Í—pj
+//    public Transform sideGroundCheck;
+//    public Transform sideTopGroundCheck;
+//    public Transform sideLeftCheck;
+//    public Transform sideRightCheck;
+//    public Transform sideTopLeftCheck;
+//    public Transform sideTopRightCheck;
+//    public Transform sideBottomLeftCheck;
+//    public Transform sideBottomRightCheck;
+//    public Transform sideRightMidCheck;
+//    public Transform sideRightLowCheck;
+//    public Transform sideLeftMidCheck;
+//    public Transform sideLeftLowCheck;
+
+//    private Rigidbody2D rb;
+//    private bool isJumping = false;
+//    private bool onGround = false;
+//    private bool isBlockedLeft = false;
+//    private bool isBlockedRight = false;
+//    private bool isBlockedTopRight = false;
+//    private bool isBlockedBottomRight = false;
+//    private bool isBlockedTopLeft = false;
+//    private bool isBlockedBottomLeft = false;
+//    private bool isBlockedRightMid = false;
+//    private bool isBlockedRightLow = false;
+//    private bool isBlockedLeftMid = false;
+//    private bool isBlockedLeftLow = false;
+//    private Vector3 initialPosition;
+
+//    void Start()
+//    {
+//        rb = GetComponent<Rigidbody2D>();
+//        initialPosition = transform.position;
+//    }
+
+//    void Update()
+//    {
+//        CheckCollisions();
+//        HandleMovement();
+//        HandleJump();
+
+//        if (transform.position.y < -10f || transform.position.x < -10f || transform.position.x > 10f)
+//        {
+//            Respawn();
+//        }
+//    }
+
+//    private void HandleMovement()
+//    {
+//        float moveInput = Input.GetAxisRaw("Horizontal");
+//        float verticalInput = Input.GetAxisRaw("Vertical");
+//        Vector2 moveVelocity = rb.velocity;
+
+//        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í
+//        {
+//            moveVelocity.x = moveInput * pl_moveSpeed;
+
+//            // ¶‰E•Ç”»’è‚ğ“K—p
+//            if ((isBlockedLeft || isBlockedLeftMid || isBlockedLeftLow) && moveInput < 0)
+//            {
+//                moveVelocity.x = 0;
+//            }
+//            if ((isBlockedRight || isBlockedRightMid || isBlockedRightLow) && moveInput > 0)
+//            {
+//                moveVelocity.x = 0;
+//            }
+//        }
+//        else if (rb.gravityScale == 0) // ¶‰Ed—Í
+//        {
+//            moveVelocity.y = verticalInput * pl_moveSpeed;
+
+//            // ã‰º•Ç”»’è‚ğ“K—p
+//            if ((isBlockedTopLeft || isBlockedTopRight) && verticalInput > 0)
+//            {
+//                moveVelocity.y = 0;
+//            }
+//            if ((isBlockedBottomLeft || isBlockedBottomRight) && verticalInput < 0)
+//            {
+//                moveVelocity.y = 0;
+//            }
+//        }
+
+//        rb.velocity = moveVelocity;
+//    }
+
+//    private void HandleJump()
+//    {
+//        if (onGround && Input.GetButtonDown("Jump"))
+//        {
+//            float rotationZ = transform.eulerAngles.z;
+//            Vector2 jumpVelocity = rb.velocity;
+
+//            if (rb.gravityScale == 1) // ’Êí‚ÌƒWƒƒƒ“ƒviã•ûŒüj
+//            {
+//                jumpVelocity.y = pl_jumpForce;
+//            }
+//            else if (rb.gravityScale == -1) // ‹td—ÍƒWƒƒƒ“ƒvi‰º•ûŒüj
+//            {
+//                jumpVelocity.y = -pl_jumpForce;
+//            }
+//            else if (rb.gravityScale == 0) // ¶‰Ed—Í
+//            {
+//                if (rotationZ == 90) // ‰EŒü‚«
+//                {
+//                    jumpVelocity.x = pl_jumpForce;
+//                }
+//                else if (rotationZ == 270) // ¶Œü‚«
+//                {
+//                    jumpVelocity.x = -pl_jumpForce;
+//                }
+//            }
+
+//            rb.velocity = jumpVelocity;
+//            onGround = false;
+//            isJumping = true;
+//        }
+//    }
+
+//    private void CheckCollisions()
+//    {
+//        float rayDistance = 0.1f;
+//        LayerMask groundLayer = LayerMask.GetMask("Ground");
+
+//        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í‚Ì‚Ì‚İ
+//        {
+//            isBlockedLeft = Physics2D.Raycast(leftCheck.position, Vector2.left, rayDistance, groundLayer);
+//            isBlockedRight = Physics2D.Raycast(rightCheck.position, Vector2.right, rayDistance, groundLayer);
+//            isBlockedTopRight = Physics2D.Raycast(topRightCheck.position, Vector2.up, rayDistance, groundLayer);
+//            isBlockedBottomRight = Physics2D.Raycast(bottomRightCheck.position, Vector2.down, rayDistance, groundLayer);
+//            isBlockedTopLeft = Physics2D.Raycast(topLeftCheck.position, Vector2.up, rayDistance, groundLayer);
+//            isBlockedBottomLeft = Physics2D.Raycast(bottomLeftCheck.position, Vector2.down, rayDistance, groundLayer);
+//            isBlockedRightMid = Physics2D.Raycast(rightMidCheck.position, Vector2.right, rayDistance, groundLayer);
+//            isBlockedRightLow = Physics2D.Raycast(rightLowCheck.position, Vector2.right, rayDistance, groundLayer);
+//            isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, groundLayer);
+//            isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, groundLayer);
+//        }
+//        else if (rb.gravityScale == 0) // ¶‰Ed—Í‚Ì‚Ì‚İ
+//        {
+//            isBlockedTopLeft = Physics2D.Raycast(sideTopLeftCheck.position, Vector2.up, rayDistance, groundLayer);
+//            isBlockedTopRight = Physics2D.Raycast(sideTopRightCheck.position, Vector2.up, rayDistance, groundLayer);
+//            isBlockedBottomLeft = Physics2D.Raycast(sideBottomLeftCheck.position, Vector2.down, rayDistance, groundLayer);
+//            isBlockedBottomRight = Physics2D.Raycast(sideBottomRightCheck.position, Vector2.down, rayDistance, groundLayer);
+//        }
+//    }
+
+
+//    //private void HandleJump()
+//    //{
+//    //    if (onGround && Input.GetButtonDown("Jump"))
+//    //    {
+//    //        float rotationZ = transform.eulerAngles.z;
+//    //        Vector2 jumpVelocity = rb.velocity;
+
+//    //        if (rb.gravityScale == 1) // ’Êí‚ÌƒWƒƒƒ“ƒviã•ûŒüj
+//    //        {
+//    //            jumpVelocity.y = pl_jumpForce;
+//    //        }
+//    //        else if (rb.gravityScale == -1) // ‹td—ÍƒWƒƒƒ“ƒvi‰º•ûŒüj
+//    //        {
+//    //            jumpVelocity.y = -pl_jumpForce;
+//    //        }
+//    //        else if (rb.gravityScale == 0) // ¶‰Ed—Í
+//    //        {
+//    //            if (rotationZ == 90) // ‰EŒü‚«
+//    //            {
+//    //                jumpVelocity.x = pl_jumpForce;
+//    //            }
+//    //            else if (rotationZ == 270) // ¶Œü‚«
+//    //            {
+//    //                jumpVelocity.x = -pl_jumpForce;
+//    //            }
+//    //        }
+
+//    //        rb.velocity = jumpVelocity;
+//    //        onGround = false;
+//    //        isJumping = true;
+//    //        Debug.Log("ƒWƒƒƒ“ƒvÀs: " + jumpVelocity);
+//    //    }
+//    //}
+
+
+
+//    //private void CheckCollisions()
+//    //{
+//    //    float rayDistance = 0.1f;
+//    //    LayerMask groundLayer = LayerMask.GetMask("Ground");
+
+//    //    if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í
+//    //    {
+//    //        onGround = Physics2D.Raycast(groundCheck.position, Vector2.down, rayDistance, groundLayer) ||
+//    //                   Physics2D.Raycast(topGroundCheck.position, Vector2.up, rayDistance, groundLayer);
+//    //    }
+//    //    else if (rb.gravityScale == 0) // ¶‰Ed—Í
+//    //    {
+//    //        onGround = Physics2D.Raycast(sideGroundCheck.position, Vector2.left, rayDistance, groundLayer) ||
+//    //                   Physics2D.Raycast(sideTopGroundCheck.position, Vector2.right, rayDistance, groundLayer);
+//    //    }
+
+//    //    isBlockedLeft = Physics2D.Raycast(leftCheck.position, Vector2.left, rayDistance, groundLayer);
+//    //    isBlockedRight = Physics2D.Raycast(rightCheck.position, Vector2.right, rayDistance, groundLayer);
+//    //    isBlockedRightMid = Physics2D.Raycast(rightMidCheck.position, Vector2.right, rayDistance, groundLayer);
+//    //    isBlockedRightLow = Physics2D.Raycast(rightLowCheck.position, Vector2.right, rayDistance, groundLayer);
+//    //    isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, groundLayer);
+//    //    isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, groundLayer);
+
+//    //    Debug.Log("onGround: " + onGround);
+//    //}
+
+//    private void OnCollisionEnter2D(Collision2D collision)
+//    {
+//        if (collision.gameObject.CompareTag("Ground"))
+//        {
+//            onGround = true;
+//            isJumping = false;
+//        }
+//        else if (collision.gameObject.CompareTag("Spikes"))
+//        {
+//            Respawn();
+//        }
+//    }
+
+//    private void OnCollisionExit2D(Collision2D collision)
+//    {
+//        if (collision.gameObject.CompareTag("Ground"))
+//        {
+//            onGround = false;
+//        }
+//    }
+
+//    private void Respawn()
+//    {
+//        transform.position = initialPosition;
+//        rb.velocity = Vector2.zero;
+//    }
+//}
+
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -5,9 +262,9 @@ public class PlayerController : MonoBehaviour
     public float pl_moveSpeed = 5f;
     public float pl_jumpForce = 10f;
 
-    // ï¿½ï¿½ï¿½ï¿½pTransform
+    // ”»’è—pTransformiã‰ºd—Í—pj
     public Transform groundCheck;
-    public Transform topGroundCheck; // ï¿½tï¿½dï¿½Íï¿½ï¿½Ì’nï¿½Ê”ï¿½ï¿½ï¿½
+    public Transform topGroundCheck;
     public Transform leftCheck;
     public Transform rightCheck;
     public Transform topRightCheck;
@@ -19,7 +276,7 @@ public class PlayerController : MonoBehaviour
     public Transform leftMidCheck;
     public Transform leftLowCheck;
 
-    // 90ï¿½xï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ GroundCheckï¿½iï¿½ï¿½ï¿½Eï¿½dï¿½Í—pï¿½j
+    // 90“x‰ñ“]‚µ‚½Transformi¶‰Ed—Í—pj
     public Transform sideGroundCheck;
     public Transform sideTopGroundCheck;
     public Transform sideLeftCheck;
@@ -38,10 +295,6 @@ public class PlayerController : MonoBehaviour
     private bool onGround = false;
     private bool isBlockedLeft = false;
     private bool isBlockedRight = false;
-    private bool isBlockedTopRight = false;
-    private bool isBlockedBottomRight = false;
-    private bool isBlockedTopLeft = false;
-    private bool isBlockedBottomLeft = false;
     private bool isBlockedRightMid = false;
     private bool isBlockedRightLow = false;
     private bool isBlockedLeftMid = false;
@@ -70,38 +323,28 @@ public class PlayerController : MonoBehaviour
     {
         float moveInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
-        Vector2 moveVelocity = rb.linearVelocity;
+        Vector2 moveVelocity = rb.velocity;
 
-        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ï¿½ã‰ºï¿½dï¿½ï¿½
+        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í
         {
             moveVelocity.x = moveInput * pl_moveSpeed;
 
-            // ï¿½ï¿½ï¿½Eï¿½Ç”ï¿½ï¿½ï¿½ï¿½Kï¿½p
             if ((isBlockedLeft || isBlockedLeftMid || isBlockedLeftLow) && moveInput < 0)
-            {
                 moveVelocity.x = 0;
-            }
             if ((isBlockedRight || isBlockedRightMid || isBlockedRightLow) && moveInput > 0)
-            {
                 moveVelocity.x = 0;
-            }
         }
-        else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½ï¿½
+        else if (rb.gravityScale == 0) // ¶‰Ed—Í
         {
             moveVelocity.y = verticalInput * pl_moveSpeed;
 
-            // ï¿½ã‰ºï¿½Ç”ï¿½ï¿½ï¿½ï¿½Kï¿½p
-            if ((isBlockedTopLeft || isBlockedTopRight) && verticalInput > 0)
-            {
+            if ((isBlockedLeft || isBlockedLeftMid || isBlockedLeftLow) && verticalInput < 0)
                 moveVelocity.y = 0;
-            }
-            if ((isBlockedBottomLeft || isBlockedBottomRight) && verticalInput < 0)
-            {
+            if ((isBlockedRight || isBlockedRightMid || isBlockedRightLow) && verticalInput > 0)
                 moveVelocity.y = 0;
-            }
         }
 
-        rb.linearVelocity = moveVelocity;
+        rb.velocity = moveVelocity;
     }
 
     private void HandleJump()
@@ -109,29 +352,22 @@ public class PlayerController : MonoBehaviour
         if (onGround && Input.GetButtonDown("Jump"))
         {
             float rotationZ = transform.eulerAngles.z;
-            Vector2 jumpVelocity = rb.linearVelocity;
+            Vector2 jumpVelocity = rb.velocity;
 
-            if (rb.gravityScale == 1) // ï¿½Êï¿½ÌƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
-            {
+            if (rb.gravityScale == 1)
                 jumpVelocity.y = pl_jumpForce;
-            }
-            else if (rb.gravityScale == -1) // ï¿½tï¿½dï¿½ÍƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
-            {
+            else if (rb.gravityScale == -1)
                 jumpVelocity.y = -pl_jumpForce;
-            }
-            else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Íï¿½
+            else if (rb.gravityScale == 0) // ¶‰Ed—Í
             {
-                if (rotationZ == 90) // ï¿½Eï¿½ï¿½ï¿½ï¿½
-                {
+                if (Mathf.Abs(rotationZ - 90f) < 1f) // –ñ90“xi‰EŒü‚«j
                     jumpVelocity.x = pl_jumpForce;
-                }
-                else if (rotationZ == 270) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-                {
+                else if (Mathf.Abs(rotationZ - 270f) < 1f) // –ñ270“xi¶Œü‚«j
                     jumpVelocity.x = -pl_jumpForce;
-                }
             }
 
-            rb.linearVelocity = jumpVelocity;
+
+            rb.velocity = jumpVelocity;
             onGround = false;
             isJumping = true;
         }
@@ -142,90 +378,28 @@ public class PlayerController : MonoBehaviour
         float rayDistance = 0.1f;
         LayerMask groundLayer = LayerMask.GetMask("Ground");
 
-        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ï¿½ã‰ºï¿½dï¿½Í‚Ìï¿½ï¿½Ì‚ï¿½
-        {
-            isBlockedLeft = Physics2D.Raycast(leftCheck.position, Vector2.left, rayDistance, groundLayer);
-            isBlockedRight = Physics2D.Raycast(rightCheck.position, Vector2.right, rayDistance, groundLayer);
-            isBlockedTopRight = Physics2D.Raycast(topRightCheck.position, Vector2.up, rayDistance, groundLayer);
-            isBlockedBottomRight = Physics2D.Raycast(bottomRightCheck.position, Vector2.down, rayDistance, groundLayer);
-            isBlockedTopLeft = Physics2D.Raycast(topLeftCheck.position, Vector2.up, rayDistance, groundLayer);
-            isBlockedBottomLeft = Physics2D.Raycast(bottomLeftCheck.position, Vector2.down, rayDistance, groundLayer);
-            isBlockedRightMid = Physics2D.Raycast(rightMidCheck.position, Vector2.right, rayDistance, groundLayer);
-            isBlockedRightLow = Physics2D.Raycast(rightLowCheck.position, Vector2.right, rayDistance, groundLayer);
-            isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, groundLayer);
-            isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, groundLayer);
-        }
-        else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Í‚Ìï¿½ï¿½Ì‚ï¿½
-        {
-            isBlockedTopLeft = Physics2D.Raycast(sideTopLeftCheck.position, Vector2.up, rayDistance, groundLayer);
-            isBlockedTopRight = Physics2D.Raycast(sideTopRightCheck.position, Vector2.up, rayDistance, groundLayer);
-            isBlockedBottomLeft = Physics2D.Raycast(sideBottomLeftCheck.position, Vector2.down, rayDistance, groundLayer);
-            isBlockedBottomRight = Physics2D.Raycast(sideBottomRightCheck.position, Vector2.down, rayDistance, groundLayer);
-        }
+        bool useSide = rb.gravityScale == 0;
+
+        Transform lCheck = useSide ? sideLeftCheck : leftCheck;
+        Transform rCheck = useSide ? sideRightCheck : rightCheck;
+        Transform rMid = useSide ? sideRightMidCheck : rightMidCheck;
+        Transform rLow = useSide ? sideRightLowCheck : rightLowCheck;
+        Transform lMid = useSide ? sideLeftMidCheck : leftMidCheck;
+        Transform lLow = useSide ? sideLeftLowCheck : leftLowCheck;
+        Transform gCheck = useSide ? sideGroundCheck : groundCheck;
+        Transform topGCheck = useSide ? sideTopGroundCheck : topGroundCheck;
+
+        isBlockedLeft = Physics2D.Raycast(lCheck.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
+        isBlockedRight = Physics2D.Raycast(rCheck.position, useSide ? Vector2.up : Vector2.right, rayDistance, groundLayer);
+        isBlockedRightMid = Physics2D.Raycast(rMid.position, useSide ? Vector2.up : Vector2.right, rayDistance, groundLayer);
+        isBlockedRightLow = Physics2D.Raycast(rLow.position, useSide ? Vector2.up : Vector2.right, rayDistance, groundLayer);
+        isBlockedLeftMid = Physics2D.Raycast(lMid.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
+        isBlockedLeftLow = Physics2D.Raycast(lLow.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
+
+        // ’n–Ê”»’èi¶‰E or ã‰º‚ÅØ‚è‘Ö‚¦j
+        onGround = Physics2D.Raycast(gCheck.position, useSide ? Vector2.left : Vector2.down, rayDistance, groundLayer)
+                || Physics2D.Raycast(topGCheck.position, useSide ? Vector2.right : Vector2.up, rayDistance, groundLayer);
     }
-
-
-    //private void HandleJump()
-    //{
-    //    if (onGround && Input.GetButtonDown("Jump"))
-    //    {
-    //        float rotationZ = transform.eulerAngles.z;
-    //        Vector2 jumpVelocity = rb.velocity;
-
-    //        if (rb.gravityScale == 1) // ï¿½Êï¿½ÌƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
-    //        {
-    //            jumpVelocity.y = pl_jumpForce;
-    //        }
-    //        else if (rb.gravityScale == -1) // ï¿½tï¿½dï¿½ÍƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
-    //        {
-    //            jumpVelocity.y = -pl_jumpForce;
-    //        }
-    //        else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Íï¿½
-    //        {
-    //            if (rotationZ == 90) // ï¿½Eï¿½ï¿½ï¿½ï¿½
-    //            {
-    //                jumpVelocity.x = pl_jumpForce;
-    //            }
-    //            else if (rotationZ == 270) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    //            {
-    //                jumpVelocity.x = -pl_jumpForce;
-    //            }
-    //        }
-
-    //        rb.velocity = jumpVelocity;
-    //        onGround = false;
-    //        isJumping = true;
-    //        Debug.Log("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½s: " + jumpVelocity);
-    //    }
-    //}
-
-
-
-    //private void CheckCollisions()
-    //{
-    //    float rayDistance = 0.1f;
-    //    LayerMask groundLayer = LayerMask.GetMask("Ground");
-
-    //    if (rb.gravityScale == 1 || rb.gravityScale == -1) // ï¿½ã‰ºï¿½dï¿½Íï¿½
-    //    {
-    //        onGround = Physics2D.Raycast(groundCheck.position, Vector2.down, rayDistance, groundLayer) ||
-    //                   Physics2D.Raycast(topGroundCheck.position, Vector2.up, rayDistance, groundLayer);
-    //    }
-    //    else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Íï¿½
-    //    {
-    //        onGround = Physics2D.Raycast(sideGroundCheck.position, Vector2.left, rayDistance, groundLayer) ||
-    //                   Physics2D.Raycast(sideTopGroundCheck.position, Vector2.right, rayDistance, groundLayer);
-    //    }
-
-    //    isBlockedLeft = Physics2D.Raycast(leftCheck.position, Vector2.left, rayDistance, groundLayer);
-    //    isBlockedRight = Physics2D.Raycast(rightCheck.position, Vector2.right, rayDistance, groundLayer);
-    //    isBlockedRightMid = Physics2D.Raycast(rightMidCheck.position, Vector2.right, rayDistance, groundLayer);
-    //    isBlockedRightLow = Physics2D.Raycast(rightLowCheck.position, Vector2.right, rayDistance, groundLayer);
-    //    isBlockedLeftMid = Physics2D.Raycast(leftMidCheck.position, Vector2.left, rayDistance, groundLayer);
-    //    isBlockedLeftLow = Physics2D.Raycast(leftLowCheck.position, Vector2.left, rayDistance, groundLayer);
-
-    //    Debug.Log("onGround: " + onGround);
-    //}
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -251,6 +425,6 @@ public class PlayerController : MonoBehaviour
     private void Respawn()
     {
         transform.position = initialPosition;
-        rb.linearVelocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
     }
 }
