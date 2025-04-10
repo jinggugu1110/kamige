@@ -17,4 +17,10 @@ public class CameraFollow : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
         }
     }
+
+    // プレイヤーのターゲットを外部から設定できるようにする
+    public void SetTarget(Transform newTarget)
+    {
+        player = newTarget;
+    }
 }

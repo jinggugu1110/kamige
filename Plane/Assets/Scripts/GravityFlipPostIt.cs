@@ -40,15 +40,12 @@ public class GravityFlipPostIt : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Attachable"))
+        if (other.GetComponent<Rigidbody2D>() == targetRb)
         {
-            if (other.GetComponent<Rigidbody2D>() == targetRb)
-            {
-                ResetGravity();
-                transform.SetParent(null);
-                targetRb = null;
-                touchTime = 0.0f;
-            }
+            ResetGravity();
+            transform.SetParent(null);
+            targetRb = null;
+            touchTime = 0.0f;
         }
     }
 
@@ -67,6 +64,7 @@ public class GravityFlipPostIt : MonoBehaviour
         if (targetRb != null)
         {
             targetRb.gravityScale = 1.0f; // 重力を元に戻す
+            targetRb.velocity = Vector2.zero; // 速度をリセット
             isGravityFlipped = false;
             Debug.Log("重力反転解除");
         }
@@ -102,11 +100,11 @@ public class GravityFlipPostIt : MonoBehaviour
 
         if (rotationZ == 90) // 左方向重力
         {
-            targetRb.velocity += new Vector2(-horizontalGravity * Time.fixedDeltaTime, 0);
+            targetRb.AddForce(new Vector2(-horizontalGravity, 0), ForceMode2D.Force);
         }
         else if (rotationZ == 270) // 右方向重力
         {
-            targetRb.velocity += new Vector2(horizontalGravity * Time.fixedDeltaTime, 0);
+            targetRb.AddForce(new Vector2(horizontalGravity, 0), ForceMode2D.Force);
         }
     }
 }

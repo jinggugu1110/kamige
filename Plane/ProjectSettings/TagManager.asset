@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Spikes
   - Attachable
+  - SabPlayer
   layers:
   - Default
   - TransparentFX
