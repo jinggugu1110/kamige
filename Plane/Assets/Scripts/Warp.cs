@@ -11,7 +11,7 @@ using UnityEngine;
 public class Warp : MonoBehaviour
 {
     Transform Warp_OutPoint;
-    private bool isinStage = false;//出口がステージ内にあればtrue
+    private bool GoalisinStage = false;//出口がステージ内にあればtrue
     private float minX = -10f;
     private float maxX = 10f;
     private float minY = -10f;
@@ -23,7 +23,7 @@ public class Warp : MonoBehaviour
 
     private void Update()
     {
-        isinStage = !(Warp_OutPoint.position.x < minX || Warp_OutPoint.position.x > maxX || Warp_OutPoint.position.y < minY);
+        GoalisinStage = !(Warp_OutPoint.position.x < minX || Warp_OutPoint.position.x > maxX || Warp_OutPoint.position.y < minY);
 
     }
 
@@ -32,7 +32,7 @@ public class Warp : MonoBehaviour
         //ワープ先がステージ内ならワープ
         if (other.CompareTag("Player"))
         {
-            if (Warp_OutPoint != null && isinStage)
+            if (Warp_OutPoint != null && GoalisinStage)
             {
                 other.transform.position = Warp_OutPoint.position;
             }
