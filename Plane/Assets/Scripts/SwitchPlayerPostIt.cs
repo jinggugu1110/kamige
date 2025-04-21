@@ -51,7 +51,7 @@ public class SwitchPlayerPostIt : MonoBehaviour
             }
 
             // ’Ç]‚ğ‰ğœ
-            transform.SetParent(null);
+            //transform.SetParent(null);
             targetObject = null;
             isActive = false;
         }
