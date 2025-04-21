@@ -12,11 +12,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - Player
   - Water
   - UI
-  - 
-  - 
+  - PostIt
+  - Ground
   - 
   - 
   - 
@@ -44,4 +44,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 1838560243
+    locked: 0
+  - name: PostIt
+    uniqueID: 1626863907
+    locked: 0
+  - name: Player
+    uniqueID: 4151291583
     locked: 0
