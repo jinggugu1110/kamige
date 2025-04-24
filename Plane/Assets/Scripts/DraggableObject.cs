@@ -4,6 +4,7 @@ public class DraggableObject : MonoBehaviour
 {
     private Vector3 offset;
     private bool isDragging = false;
+    private bool isMouseOver = false;
     private GravityFlipPostIt gravityScript;
 
     void Start()
@@ -32,11 +33,28 @@ public class DraggableObject : MonoBehaviour
 
     void Update()
     {
-        // `R` キーを押したら 90° 回転
-        if (Input.GetKeyDown(KeyCode.R))
+        //// `R` キーを押したら 90° 回転
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    RotateObject();
+        //}
+        // マウスが上にあるときだけRキーで回転
+        if (isMouseOver && Input.GetKeyDown(KeyCode.R))
         {
             RotateObject();
         }
+    }
+
+
+    //マウスが触れているかどうかの処理
+    private void OnMouseEnter()
+    {
+        isMouseOver = true;
+    }
+
+    private void OnMouseExit()
+    {
+        isMouseOver = false;
     }
 
     private void RotateObject()
