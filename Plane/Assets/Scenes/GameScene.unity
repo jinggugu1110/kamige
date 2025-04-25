@@ -651,7 +651,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -777,6 +777,7 @@ GameObject:
   - component: {fileID: 345142048}
   - component: {fileID: 345142047}
   - component: {fileID: 345142046}
+  - component: {fileID: 345142051}
   m_Layer: 0
   m_Name: Warp_In
   m_TagString: Untagged
@@ -791,11 +792,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 345142045}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99e16929128d51a419b2f1c4f29ac0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Warp_OutPoint: {fileID: 0}
+  OutisinStage: 0
+  minX: -10
+  maxX: 10
+  minY: -10
+  warp_vecX: 0
+  warp_vecY: 0
 --- !u!58 &345142047
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -926,6 +934,18 @@ Transform:
   - {fileID: 905351162}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &345142051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345142045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 240253b9fdc71244abe98cd98a9eeebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &354657842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,7 +1292,7 @@ Transform:
   m_GameObject: {fileID: 463489386}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.26, y: 1.48, z: 0}
+  m_LocalPosition: {x: -6.39, y: 1.34, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1612,7 +1632,7 @@ GameObject:
   - component: {fileID: 615862690}
   m_Layer: 6
   m_Name: SwitchPlayerPostIt
-  m_TagString: Player
+  m_TagString: PostIt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1774,7 +1794,7 @@ Transform:
   m_GameObject: {fileID: 615862689}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.0499997, y: 2.19, z: 0}
+  m_LocalPosition: {x: 4.66, y: 2.7, z: 0}
   m_LocalScale: {x: 1.2405841, y: 0.5693833, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2316,7 +2336,7 @@ GameObject:
   - component: {fileID: 1060833968}
   m_Layer: 6
   m_Name: GravityPostIt
-  m_TagString: Untagged
+  m_TagString: PostIt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2731,7 +2751,7 @@ Transform:
   m_GameObject: {fileID: 1222308568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.14, y: 1.45, z: 0}
+  m_LocalPosition: {x: -3.86, y: 1.42, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6533,7 +6553,7 @@ Transform:
   m_GameObject: {fileID: 2091054244}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.92, y: 1.55, z: 0}
+  m_LocalPosition: {x: 3.95, y: 1.35, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
