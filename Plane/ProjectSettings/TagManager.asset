@@ -8,6 +8,7 @@ TagManager:
   - Spikes
   - Attachable
   - SabPlayer
+  - PostIt
   layers:
   - Default
   - TransparentFX
