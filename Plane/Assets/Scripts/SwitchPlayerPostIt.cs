@@ -12,13 +12,18 @@ public class SwitchPlayerPostIt : MonoBehaviour
             // 貼り付け対象を記録
             targetObject = other.gameObject;
 
-            // プレイヤー操作を無効化
-            PlayerManager.Instance.mainPlayer.GetComponent<PlayerController>().enabled = false;
+           
 
             // ターゲットに TemporaryPlayerController があれば有効化
             if (targetObject.TryGetComponent(out TemporaryPlayerController temp))
             {
                 temp.enabled = true;
+            }
+
+            // ターゲットに PlayerController があれば操作可能に
+            if (targetObject.TryGetComponent(out PlayerController player))
+            {
+                player.canMove = true;
             }
 
             // この付箋をターゲットに追従させる
@@ -31,13 +36,18 @@ public class SwitchPlayerPostIt : MonoBehaviour
     {
         if (isActive && other.gameObject == targetObject)
         {
-            // メインプレイヤーを復帰
-            PlayerManager.Instance.mainPlayer.GetComponent<PlayerController>().enabled = true;
+           
 
             // 一時プレイヤー操作を終了
             if (targetObject.TryGetComponent(out TemporaryPlayerController temp))
             {
                 temp.enabled = false;
+            }
+
+            // ターゲットに PlayerController があれば操作停止
+            if (targetObject.TryGetComponent(out PlayerController player))
+            {
+                player.canMove = false;
             }
 
             // 追従を解除
