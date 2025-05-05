@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
     public float pl_moveSpeed = 5f;
     public float pl_jumpForce = 10f;
 
-    // ”»’è—pTransformiã‰ºd—Í—pj
+    // ï¿½ï¿½ï¿½ï¿½pTransformï¿½iï¿½ã‰ºï¿½dï¿½Í—pï¿½j
     public Transform groundCheck;
     public Transform topGroundCheck;
     public Transform leftCheck;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     public Transform leftMidCheck;
     public Transform leftLowCheck;
 
-    // 90“x‰ñ“]‚µ‚½Transformi¶‰Ed—Í—pj
+    // 90ï¿½xï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½Transformï¿½iï¿½ï¿½ï¿½Eï¿½dï¿½Í—pï¿½j
     public Transform sideGroundCheck;
     public Transform sideTopGroundCheck;
     public Transform sideLeftCheck;
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (!canMove) return; //‘€ì‚ğƒuƒƒbƒN
+        if (!canMove) return; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½bï¿½N
         CheckCollisions();
         HandleMovement();
         HandleJump();
@@ -68,9 +68,9 @@ public class PlayerController : MonoBehaviour
     {
         float moveInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
-        Vector2 moveVelocity = rb.velocity;
+        Vector2 moveVelocity = rb.linearVelocity;
 
-        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ã‰ºd—Í
+        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ï¿½ã‰ºï¿½dï¿½ï¿½
         {
             moveVelocity.x = moveInput * pl_moveSpeed;
 
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
             if ((isBlockedRight || isBlockedRightMid || isBlockedRightLow) && moveInput > 0)
                 moveVelocity.x = 0;
         }
-        else if (rb.gravityScale == 0) // ¶‰Ed—Í
+        else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½ï¿½
         {
             moveVelocity.y = verticalInput * pl_moveSpeed;
 
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
                 moveVelocity.y = 0;
         }
 
-        rb.velocity = moveVelocity;
+        rb.linearVelocity = moveVelocity;
     }
 
     private void HandleJump()
@@ -97,22 +97,22 @@ public class PlayerController : MonoBehaviour
         if (onGround && Input.GetButtonDown("Jump"))
         {
             float rotationZ = transform.eulerAngles.z;
-            Vector2 jumpVelocity = rb.velocity;
+            Vector2 jumpVelocity = rb.linearVelocity;
 
             if (rb.gravityScale == 1)
                 jumpVelocity.y = pl_jumpForce;
             else if (rb.gravityScale == -1)
                 jumpVelocity.y = -pl_jumpForce;
-            else if (rb.gravityScale == 0) // ¶‰Ed—Í
+            else if (rb.gravityScale == 0) // ï¿½ï¿½ï¿½Eï¿½dï¿½Íï¿½
             {
-                if (Mathf.Abs(rotationZ - 90f) < 1f) // –ñ90“xi‰EŒü‚«j
+                if (Mathf.Abs(rotationZ - 90f) < 1f) // ï¿½ï¿½90ï¿½xï¿½iï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½j
                     jumpVelocity.x = pl_jumpForce;
-                else if (Mathf.Abs(rotationZ - 270f) < 1f) // –ñ270“xi¶Œü‚«j
+                else if (Mathf.Abs(rotationZ - 270f) < 1f) // ï¿½ï¿½270ï¿½xï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
                     jumpVelocity.x = -pl_jumpForce;
             }
 
 
-            rb.velocity = jumpVelocity;
+            rb.linearVelocity = jumpVelocity;
             onGround = false;
             isJumping = true;
         }
@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
         isBlockedLeftMid = Physics2D.Raycast(lMid.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
         isBlockedLeftLow = Physics2D.Raycast(lLow.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
 
-        // ’n–Ê”»’èi¶‰E or ã‰º‚ÅØ‚è‘Ö‚¦j
+        // ï¿½nï¿½Ê”ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½E or ï¿½ã‰ºï¿½ÅØ‚ï¿½Ö‚ï¿½ï¿½j
         onGround = Physics2D.Raycast(gCheck.position, useSide ? Vector2.left : Vector2.down, rayDistance, groundLayer)
                 || Physics2D.Raycast(topGCheck.position, useSide ? Vector2.right : Vector2.up, rayDistance, groundLayer);
     }
@@ -170,6 +170,6 @@ public class PlayerController : MonoBehaviour
     private void Respawn()
     {
         transform.position = initialPosition;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
     }
 }
