@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class GravityFlipPostIt : MonoBehaviour
 {
-    public float activationTime = 1.0f; // ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚Å‚Ìï¿½ï¿½ï¿½
+    public float activationTime = 1.0f; // ”­“®‚Ü‚Å‚ÌŠÔ
     private float touchTime = 0.0f;
     private Rigidbody2D targetRb;
     private bool isGravityFlipped = false;
-    private float horizontalGravity = 9.8f; // Xï¿½ï¿½ï¿½ï¿½ï¿½Ìdï¿½ï¿½
+    private float horizontalGravity = 9.8f; // X•ûŒü‚Ìd—Í
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -27,9 +27,9 @@ public class GravityFlipPostIt : MonoBehaviour
     {
         if ((other.CompareTag("Player") || other.CompareTag("Attachable")) && targetRb != null)
         {
-            if (!isGravityFlipped) // ï¿½ï¿½ï¿½Å‚É”ï¿½ï¿½ï¿½ï¿½Ï‚İ‚È‚çˆï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
+            if (!isGravityFlipped) // ‚·‚Å‚É”­“®Ï‚İ‚È‚çˆ—‚µ‚È‚¢
             {
-                touchTime += Time.deltaTime; // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ã~ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½iï¿½ï¿½
+                touchTime += Time.deltaTime; // ƒvƒŒƒCƒ„[‚ªÃ~‚µ‚Ä‚¢‚Ä‚àŠÔ‚ªi‚Ş
                 if (touchTime >= activationTime)
                 {
                     ActivateGravityFlip();
@@ -55,7 +55,7 @@ public class GravityFlipPostIt : MonoBehaviour
         {
             isGravityFlipped = true;
             UpdateGravityBasedOnRotation(transform.eulerAngles.z);
-            Debug.Log("ï¿½dï¿½Í”ï¿½ï¿½]ï¿½tâ³‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½I");
+            Debug.Log("d—Í”½“]•tâ³‚ª”­“®I");
         }
     }
 
@@ -63,10 +63,10 @@ public class GravityFlipPostIt : MonoBehaviour
     {
         if (targetRb != null)
         {
-            targetRb.gravityScale = 1.0f; // ï¿½dï¿½Í‚ï¿½ï¿½ï¿½ï¿½É–ß‚ï¿½
-            targetRb.linearVelocity = Vector2.zero; // ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
+            targetRb.gravityScale = 1.0f; // d—Í‚ğŒ³‚É–ß‚·
+            targetRb.velocity = Vector2.zero; // ‘¬“x‚ğƒŠƒZƒbƒg
             isGravityFlipped = false;
-            Debug.Log("ï¿½dï¿½Í”ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½");
+            Debug.Log("d—Í”½“]‰ğœ");
         }
     }
 
@@ -76,19 +76,19 @@ public class GravityFlipPostIt : MonoBehaviour
 
         if (rotationZ == 0)
         {
-            targetRb.gravityScale = -1.0f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Édï¿½ï¿½
+            targetRb.gravityScale = -1.0f; // ã•ûŒü‚Éd—Í
         }
         else if (rotationZ == 90)
         {
-            targetRb.gravityScale = 0.0f; // ï¿½dï¿½Í‚ğ–³Œï¿½ï¿½ï¿½
+            targetRb.gravityScale = 0.0f; // d—Í‚ğ–³Œø‰»
         }
         else if (rotationZ == 180)
         {
-            targetRb.gravityScale = 1.0f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½Êï¿½Ìdï¿½Íj
+            targetRb.gravityScale = 1.0f; // ‰º•ûŒüi’Êí‚Ìd—Íj
         }
         else if (rotationZ == 270)
         {
-            targetRb.gravityScale = 0.0f; // ï¿½dï¿½Í‚ğ–³Œï¿½ï¿½ï¿½
+            targetRb.gravityScale = 0.0f; // d—Í‚ğ–³Œø‰»
         }
     }
 
@@ -98,11 +98,11 @@ public class GravityFlipPostIt : MonoBehaviour
 
         float rotationZ = transform.eulerAngles.z;
 
-        if (rotationZ == 90) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dï¿½ï¿½
+        if (rotationZ == 90) // ¶•ûŒüd—Í
         {
             targetRb.AddForce(new Vector2(-horizontalGravity, 0), ForceMode2D.Force);
         }
-        else if (rotationZ == 270) // ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½dï¿½ï¿½
+        else if (rotationZ == 270) // ‰E•ûŒüd—Í
         {
             targetRb.AddForce(new Vector2(horizontalGravity, 0), ForceMode2D.Force);
         }
