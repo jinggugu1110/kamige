@@ -4,7 +4,7 @@ public class TemporaryPlayerController : MonoBehaviour
     public float pl_moveSpeed = 5f;
     public float pl_jumpForce = 10f;
 
-    // ÔøΩÔøΩÔøΩÔøΩpTransformÔøΩiÔøΩ„â∫ÔøΩdÔøΩÕópÔøΩj
+    // îªíËópTransformÅiè„â∫èdóÕópÅj
     public Transform groundCheck;
     public Transform topGroundCheck;
     public Transform leftCheck;
@@ -18,7 +18,7 @@ public class TemporaryPlayerController : MonoBehaviour
     public Transform leftMidCheck;
     public Transform leftLowCheck;
 
-    // 90ÔøΩxÔøΩÔøΩ]ÔøΩÔøΩÔøΩÔøΩTransformÔøΩiÔøΩÔøΩÔøΩEÔøΩdÔøΩÕópÔøΩj
+    // 90ìxâÒì]ÇµÇΩTransformÅiç∂âEèdóÕópÅj
     public Transform sideGroundCheck;
     public Transform sideTopGroundCheck;
     public Transform sideLeftCheck;
@@ -66,9 +66,9 @@ public class TemporaryPlayerController : MonoBehaviour
     {
         float moveInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
-        Vector2 moveVelocity = rb.linearVelocity;
+        Vector2 moveVelocity = rb.velocity;
 
-        if (rb.gravityScale == 1 || rb.gravityScale == -1) // ÔøΩ„â∫ÔøΩdÔøΩÔøΩ
+        if (rb.gravityScale == 1 || rb.gravityScale == -1) // è„â∫èdóÕ
         {
             moveVelocity.x = moveInput * pl_moveSpeed;
 
@@ -77,7 +77,7 @@ public class TemporaryPlayerController : MonoBehaviour
             if ((isBlockedRight || isBlockedRightMid || isBlockedRightLow) && moveInput > 0)
                 moveVelocity.x = 0;
         }
-        else if (rb.gravityScale == 0) // ÔøΩÔøΩÔøΩEÔøΩdÔøΩÔøΩ
+        else if (rb.gravityScale == 0) // ç∂âEèdóÕ
         {
             moveVelocity.y = verticalInput * pl_moveSpeed;
 
@@ -87,7 +87,7 @@ public class TemporaryPlayerController : MonoBehaviour
                 moveVelocity.y = 0;
         }
 
-        rb.linearVelocity = moveVelocity;
+        rb.velocity = moveVelocity;
     }
 
     private void HandleJump()
@@ -95,22 +95,22 @@ public class TemporaryPlayerController : MonoBehaviour
         if (onGround && Input.GetButtonDown("Jump"))
         {
             float rotationZ = transform.eulerAngles.z;
-            Vector2 jumpVelocity = rb.linearVelocity;
+            Vector2 jumpVelocity = rb.velocity;
 
             if (rb.gravityScale == 1)
                 jumpVelocity.y = pl_jumpForce;
             else if (rb.gravityScale == -1)
                 jumpVelocity.y = -pl_jumpForce;
-            else if (rb.gravityScale == 0) // ÔøΩÔøΩÔøΩEÔøΩdÔøΩÕéÔøΩ
+            else if (rb.gravityScale == 0) // ç∂âEèdóÕéû
             {
-                if (Mathf.Abs(rotationZ - 90f) < 1f) // ÔøΩÔøΩ90ÔøΩxÔøΩiÔøΩEÔøΩÔøΩÔøΩÔøΩÔøΩj
+                if (Mathf.Abs(rotationZ - 90f) < 1f) // ñÒ90ìxÅiâEå¸Ç´Åj
                     jumpVelocity.x = pl_jumpForce;
-                else if (Mathf.Abs(rotationZ - 270f) < 1f) // ÔøΩÔøΩ270ÔøΩxÔøΩiÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩj
+                else if (Mathf.Abs(rotationZ - 270f) < 1f) // ñÒ270ìxÅiç∂å¸Ç´Åj
                     jumpVelocity.x = -pl_jumpForce;
             }
 
 
-            rb.linearVelocity = jumpVelocity;
+            rb.velocity = jumpVelocity;
             onGround = false;
             isJumping = true;
         }
@@ -139,7 +139,7 @@ public class TemporaryPlayerController : MonoBehaviour
         isBlockedLeftMid = Physics2D.Raycast(lMid.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
         isBlockedLeftLow = Physics2D.Raycast(lLow.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
 
-        // ÔøΩnÔøΩ îÔøΩÔøΩÔøΩiÔøΩÔøΩÔøΩE or ÔøΩ„â∫ÔøΩ≈êÿÇÔøΩ÷ÇÔøΩÔøΩj
+        // ínñ îªíËÅiç∂âE or è„â∫Ç≈êÿÇËë÷Ç¶Åj
         onGround = Physics2D.Raycast(gCheck.position, useSide ? Vector2.left : Vector2.down, rayDistance, groundLayer)
                 || Physics2D.Raycast(topGCheck.position, useSide ? Vector2.right : Vector2.up, rayDistance, groundLayer);
     }
@@ -168,6 +168,6 @@ public class TemporaryPlayerController : MonoBehaviour
     private void Respawn()
     {
         transform.position = initialPosition;
-        rb.linearVelocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
     }
 }
