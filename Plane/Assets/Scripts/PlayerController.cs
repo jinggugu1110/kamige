@@ -75,9 +75,9 @@ public class PlayerController : MonoBehaviour
             moveVelocity.x = moveInput * pl_moveSpeed;
 
             if ((isBlockedLeft || isBlockedLeftMid || isBlockedLeftLow) && moveInput < 0)
-                moveVelocity.x = 0;
+                moveVelocity.x = Mathf.Max(0, moveVelocity.x);
             if ((isBlockedRight || isBlockedRightMid || isBlockedRightLow) && moveInput > 0)
-                moveVelocity.x = 0;
+                moveVelocity.x = Mathf.Min(0, moveVelocity.x);
         }
         else if (rb.gravityScale == 0) // ç∂âEèdóÕ
         {
@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
     private void CheckCollisions()
     {
         float rayDistance = 0.1f;
-        LayerMask groundLayer = LayerMask.GetMask("Ground");
+        LayerMask groundLayer = LayerMask.GetMask("Ground", "Grass");
 
         bool useSide = rb.gravityScale == 0;
 
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground")|| collision.gameObject.CompareTag("grass"))
         {
             onGround = true;
             isJumping = false;
