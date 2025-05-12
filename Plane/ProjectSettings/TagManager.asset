@@ -9,6 +9,9 @@ TagManager:
   - Attachable
   - SabPlayer
   - PostIt
+  - conflictPostIt
+  - nonconflictPostIt
+  - grass
   layers:
   - Default
   - TransparentFX

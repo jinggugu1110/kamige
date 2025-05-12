@@ -141,14 +141,37 @@ public class PlayerController : MonoBehaviour
         isBlockedLeftMid = Physics2D.Raycast(lMid.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
         isBlockedLeftLow = Physics2D.Raycast(lLow.position, useSide ? Vector2.down : Vector2.left, rayDistance, groundLayer);
 
+       
+
+
+        LayerMask grassLayer = LayerMask.GetMask("Grass");
+
+        Transform grlCheck = useSide ? sideLeftCheck : leftCheck;
+        Transform grrCheck = useSide ? sideRightCheck : rightCheck;
+        Transform grrMid = useSide ? sideRightMidCheck : rightMidCheck;
+        Transform grrLow = useSide ? sideRightLowCheck : rightLowCheck;
+        Transform grlMid = useSide ? sideLeftMidCheck : leftMidCheck;
+        Transform grlLow = useSide ? sideLeftLowCheck : leftLowCheck;
+        Transform grgCheck = useSide ? sideGroundCheck : groundCheck;
+        Transform grtopGCheck = useSide ? sideTopGroundCheck : topGroundCheck;
+
+        isBlockedLeft = Physics2D.Raycast(grlCheck.position, useSide ? Vector2.down : Vector2.left, rayDistance, grassLayer);
+        isBlockedRight = Physics2D.Raycast(grrCheck.position, useSide ? Vector2.up : Vector2.right, rayDistance, grassLayer);
+        isBlockedRightMid = Physics2D.Raycast(grrMid.position, useSide ? Vector2.up : Vector2.right, rayDistance, grassLayer);
+        isBlockedRightLow = Physics2D.Raycast(grrLow.position, useSide ? Vector2.up : Vector2.right, rayDistance, grassLayer);
+        isBlockedLeftMid = Physics2D.Raycast(grlMid.position, useSide ? Vector2.down : Vector2.left, rayDistance, grassLayer);
+        isBlockedLeftLow = Physics2D.Raycast(grlLow.position, useSide ? Vector2.down : Vector2.left, rayDistance, grassLayer);
+
         // 地面判定（左右 or 上下で切り替え）
-        onGround = Physics2D.Raycast(gCheck.position, useSide ? Vector2.left : Vector2.down, rayDistance, groundLayer)
+        onGround = Physics2D.Raycast(grgCheck.position, useSide ? Vector2.left : Vector2.down, rayDistance, grassLayer)
+                || Physics2D.Raycast(grtopGCheck.position, useSide ? Vector2.right : Vector2.up, rayDistance, grassLayer)
+                ||Physics2D.Raycast(gCheck.position, useSide ? Vector2.left : Vector2.down, rayDistance, groundLayer)
                 || Physics2D.Raycast(topGCheck.position, useSide ? Vector2.right : Vector2.up, rayDistance, groundLayer);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground")|| collision.gameObject.CompareTag("grass"))
         {
             onGround = true;
             isJumping = false;
