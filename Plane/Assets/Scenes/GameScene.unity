@@ -1407,7 +1407,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.537615
+  orthographic size: 5.7326083
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3156,9 +3156,13 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 7930ae1d70066444395681dc245a371b, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
   - m_RefCount: 5
     m_Data: {fileID: 2045859504, guid: 233b796d2a5df9640931955ec610a8b8, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileMatrixArray:
@@ -3186,8 +3190,8 @@ Tilemap:
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -26, y: -5, z: 0}
-  m_Size: {x: 34, y: 10, z: 1}
+  m_Origin: {x: -26, y: -10, z: 0}
+  m_Size: {x: 57, y: 15, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -14346,7 +14350,7 @@ GameObject:
   - component: {fileID: 1845407052}
   - component: {fileID: 1845407051}
   - component: {fileID: 1845407050}
-  - component: {fileID: 1845407049}
+  - component: {fileID: 1845407053}
   m_Layer: 8
   m_Name: Grass
   m_TagString: grass
@@ -14354,21 +14358,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1845407049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1845407048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 528a37a345d7cc143b2a6b85d8500bf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leafPrefab: {fileID: 197123053}
-  maxLeafCount: 30
-  leafSpacing: 0.5
 --- !u!61 &1845407050
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14475,13 +14464,28 @@ Transform:
   m_GameObject: {fileID: 1845407048}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.498, y: -4.495, z: 0}
+  m_LocalPosition: {x: -4.5, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 197123056}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1845407053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845407048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 528a37a345d7cc143b2a6b85d8500bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leafPrefab: {fileID: 197123053}
+  maxLeafCount: 30
+  leafSpacing: 0.5
 --- !u!1 &1845764092
 GameObject:
   m_ObjectHideFlags: 0
