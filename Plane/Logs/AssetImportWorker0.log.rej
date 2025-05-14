@@ -1,0 +1,18 @@
+diff a/Plane/Logs/AssetImportWorker0.log b/Plane/Logs/AssetImportWorker0.log	(rejected hunks)
+@@ -59,12 +59,12 @@
+     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+     "memorysetup-temp-allocator-size-gfx=262144"
+-Player connection [3944]  Target information:
++Player connection [20004]  Target information:
+ 
+-Player connection [3944]  * "[IP] 10.232.4.50 [Port] 0 [Flags] 2 [Guid] 213822036 [EditorId] 213822036 [Version] 1048832 [Id] WindowsEditor(7,JING) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
++Player connection [20004]  * "[IP] 10.232.4.13 [Port] 0 [Flags] 2 [Guid] 2127870373 [EditorId] 2127870373 [Version] 1048832 [Id] WindowsEditor(7,JING) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+ 
+-Player connection [3944] Host joined multi-casting on [225.0.0.222:54997]...
+-Player connection [3944] Host joined alternative multi-casting on [225.0.0.222:34997]...
++Player connection [20004] Host joined multi-casting on [225.0.0.222:54997]...
++Player connection [20004] Host joined alternative multi-casting on [225.0.0.222:34997]...
+ JobSystem: Creating JobQueue using job-worker-count value 13
+ Input System module state changed to: Initialized.
+ [Physics::Module] Initialized fallback backend.

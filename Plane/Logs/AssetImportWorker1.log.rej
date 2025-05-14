@@ -1,0 +1,10 @@
+diff a/Plane/Logs/AssetImportWorker1.log b/Plane/Logs/AssetImportWorker1.log	(rejected hunks)
+@@ -15,7 +15,7 @@
+ -logFile
+ Logs/AssetImportWorker1.log
+ -srvPort
+-50243
++54941
+ -job-worker-count
+ 13
+ -background-job-worker-count
