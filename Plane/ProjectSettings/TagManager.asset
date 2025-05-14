@@ -9,6 +9,7 @@ TagManager:
   - Attachable
   - SabPlayer
   - PostIt
+  - Enemy
   layers:
   - Default
   - TransparentFX
