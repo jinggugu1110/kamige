@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 515189cc05d42c1499bab2748dc0092b
+=======
+guid: a6ec4897f913eaf4c93cf1c5a346360f
+>>>>>>> origin/kitami
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -16,7 +16,11 @@ C:/Users/tnina/Documents/GitHub/2025kamige/kamige/Plane
 Logs/AssetImportWorker0.log
 -srvPort
 <<<<<<< HEAD
+<<<<<<< HEAD
 54497
+=======
+53466
+>>>>>>> origin/kitami
 Successfully changed project path to: C:/Users/katat/OneDrive/デスクトップ/神ゲー/Plane
 C:/Users/katat/OneDrive/デスクトップ/神ゲー/Plane
 =======
@@ -56,16 +60,21 @@ C:/Users/tnina/Documents/GitHub/2025kamige/kamige/Plane
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
 <<<<<<< HEAD
+<<<<<<< HEAD
 Player connection [7892]  Target information:
+=======
+Player connection [13812]  Target information:
+>>>>>>> origin/kitami
 
-Player connection [7892]  * "[IP] 10.64.17.29 [Port] 0 [Flags] 2 [Guid] 1795486850 [EditorId] 1795486850 [Version] 1048832 [Id] WindowsEditor(7,win11ohs30150) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [13812]  * "[IP] 10.64.18.167 [Port] 0 [Flags] 2 [Guid] 4176728674 [EditorId] 4176728674 [Version] 1048832 [Id] WindowsEditor(7,win11ohs30150) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [7892]  * "[IP] 172.23.144.1 [Port] 0 [Flags] 2 [Guid] 1795486850 [EditorId] 1795486850 [Version] 1048832 [Id] WindowsEditor(7,win11ohs30150) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [13812]  * "[IP] 172.23.144.1 [Port] 0 [Flags] 2 [Guid] 4176728674 [EditorId] 4176728674 [Version] 1048832 [Id] WindowsEditor(7,win11ohs30150) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [7892] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [7892] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [13812] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [13812] Host joined alternative multi-casting on [225.0.0.222:34997]...
 Input System module state changed to: Initialized.
 [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+<<<<<<< HEAD
 Refreshing native plugins compatible for Editor in 14.31 ms, found 4 plugins.
 =======
 Player connection [1332]  Target information:
@@ -78,6 +87,9 @@ Input System module state changed to: Initialized.
 [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
 Refreshing native plugins compatible for Editor in 10.74 ms, found 4 plugins.
 >>>>>>> origin/Enemy
+=======
+Refreshing native plugins compatible for Editor in 15.75 ms, found 4 plugins.
+>>>>>>> origin/kitami
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.58f1 (ed7f6eacb62e)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2022.3.58f1/Editor/Data/Resources/UnitySubsystems
@@ -103,16 +115,22 @@ Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.58f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.58f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
 <<<<<<< HEAD
+<<<<<<< HEAD
 Registered in 0.007605 seconds.
 - Loaded All Assemblies, in  0.344 seconds
 =======
 Registered in 0.008633 seconds.
 - Loaded All Assemblies, in  0.353 seconds
 >>>>>>> origin/Enemy
+=======
+Registered in 0.007993 seconds.
+- Loaded All Assemblies, in  0.323 seconds
+>>>>>>> origin/kitami
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
 Android Extension - Scanning For ADB Devices 295 ms
 Mono: successfully reloaded assembly
+<<<<<<< HEAD
 <<<<<<< HEAD
 - Finished resetting the current domain, in  0.258 seconds
 Domain Reload Profiling: 600ms
@@ -122,32 +140,42 @@ Domain Reload Profiling: 600ms
 Domain Reload Profiling: 939ms
 	BeginReloadAssembly (103ms)
 >>>>>>> origin/Enemy
+=======
+- Finished resetting the current domain, in  0.254 seconds
+Domain Reload Profiling: 576ms
+	BeginReloadAssembly (92ms)
+>>>>>>> origin/kitami
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
 <<<<<<< HEAD
+<<<<<<< HEAD
 	RebuildCommonClasses (33ms)
+=======
+	RebuildCommonClasses (31ms)
+>>>>>>> origin/kitami
 	RebuildNativeTypeToScriptingClass (9ms)
-	initialDomainReloadingComplete (58ms)
-	LoadAllAssembliesAndSetupDomain (133ms)
-		LoadAssemblies (106ms)
+	initialDomainReloadingComplete (52ms)
+	LoadAllAssembliesAndSetupDomain (137ms)
+		LoadAssemblies (90ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (132ms)
-			TypeCache.Refresh (130ms)
-				TypeCache.ScanAssembly (116ms)
+		AnalyzeDomain (135ms)
+			TypeCache.Refresh (134ms)
+				TypeCache.ScanAssembly (119ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (0ms)
-	FinalizeReload (259ms)
+	FinalizeReload (254ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (211ms)
+		SetupLoadedEditorAssemblies (202ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (11ms)
-			SetLoadedEditorAssemblies (8ms)
+			InitializePlatformSupportModulesInManaged (9ms)
+			SetLoadedEditorAssemblies (6ms)
 			RefreshPlugins (0ms)
 			BeforeProcessingInitializeOnLoad (2ms)
+<<<<<<< HEAD
 			ProcessInitializeOnLoadAttributes (148ms)
 			ProcessInitializeOnLoadMethodAttributes (42ms)
 =======
@@ -174,6 +202,10 @@ Domain Reload Profiling: 939ms
 			ProcessInitializeOnLoadAttributes (112ms)
 			ProcessInitializeOnLoadMethodAttributes (44ms)
 >>>>>>> origin/Enemy
+=======
+			ProcessInitializeOnLoadAttributes (140ms)
+			ProcessInitializeOnLoadMethodAttributes (45ms)
+>>>>>>> origin/kitami
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -183,13 +215,18 @@ Worker process is ready to serve import requests
 Caller must complete domain reload
 Begin MonoManager ReloadAssembly
 <<<<<<< HEAD
+<<<<<<< HEAD
 - Loaded All Assemblies, in  0.597 seconds
 =======
 - Loaded All Assemblies, in  0.775 seconds
 >>>>>>> origin/Enemy
+=======
+- Loaded All Assemblies, in  0.768 seconds
+>>>>>>> origin/kitami
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
 Mono: successfully reloaded assembly
+<<<<<<< HEAD
 <<<<<<< HEAD
 - Finished resetting the current domain, in  0.537 seconds
 Domain Reload Profiling: 1130ms
@@ -199,10 +236,16 @@ Domain Reload Profiling: 1130ms
 Domain Reload Profiling: 1478ms
 	BeginReloadAssembly (141ms)
 >>>>>>> origin/Enemy
+=======
+- Finished resetting the current domain, in  0.714 seconds
+Domain Reload Profiling: 1475ms
+	BeginReloadAssembly (154ms)
+>>>>>>> origin/kitami
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (4ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
+<<<<<<< HEAD
 <<<<<<< HEAD
 		CreateAndSetChildDomain (18ms)
 	RebuildCommonClasses (33ms)
@@ -210,34 +253,42 @@ Domain Reload Profiling: 1478ms
 	initialDomainReloadingComplete (39ms)
 	LoadAllAssembliesAndSetupDomain (389ms)
 		LoadAssemblies (310ms)
+=======
+		CreateAndSetChildDomain (24ms)
+	RebuildCommonClasses (46ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (46ms)
+	LoadAllAssembliesAndSetupDomain (503ms)
+		LoadAssemblies (376ms)
+>>>>>>> origin/kitami
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (151ms)
-			TypeCache.Refresh (127ms)
-				TypeCache.ScanAssembly (114ms)
-			ScanForSourceGeneratedMonoScriptInfo (16ms)
-			ResolveRequiredComponents (5ms)
-	FinalizeReload (537ms)
+		AnalyzeDomain (219ms)
+			TypeCache.Refresh (187ms)
+				TypeCache.ScanAssembly (166ms)
+			ScanForSourceGeneratedMonoScriptInfo (23ms)
+			ResolveRequiredComponents (7ms)
+	FinalizeReload (714ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (421ms)
+		SetupLoadedEditorAssemblies (549ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (7ms)
-			SetLoadedEditorAssemblies (3ms)
+			InitializePlatformSupportModulesInManaged (10ms)
+			SetLoadedEditorAssemblies (4ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (63ms)
-			ProcessInitializeOnLoadAttributes (309ms)
-			ProcessInitializeOnLoadMethodAttributes (29ms)
-			AfterProcessingInitializeOnLoad (9ms)
+			BeforeProcessingInitializeOnLoad (82ms)
+			ProcessInitializeOnLoadAttributes (404ms)
+			ProcessInitializeOnLoadMethodAttributes (40ms)
+			AfterProcessingInitializeOnLoad (10ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (5ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
-Refreshing native plugins compatible for Editor in 5.19 ms, found 4 plugins.
+		AwakeInstancesAfterBackupRestoration (7ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.06 seconds
+Refreshing native plugins compatible for Editor in 6.75 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 3989 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 32 unused Assets / (57.4 KB). Loaded Objects now: 4459.
-Memory consumption went from 148.3 MB to 148.2 MB.
-Total: 3.448100 ms (FindLiveObjects: 0.264200 ms CreateObjectMapping: 0.137500 ms MarkObjects: 2.907000 ms  DeleteObjects: 0.138600 ms)
+Unloading 32 unused Assets / (57.1 KB). Loaded Objects now: 4459.
+Memory consumption went from 148.2 MB to 148.2 MB.
+Total: 3.353100 ms (FindLiveObjects: 0.428700 ms CreateObjectMapping: 0.166400 ms MarkObjects: 2.644600 ms  DeleteObjects: 0.112200 ms)
 
 =======
 		CreateAndSetChildDomain (21ms)
@@ -290,6 +341,7 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
+<<<<<<< HEAD
 Received Import Request.
   Time since last request: 1878035.566001 seconds.
   path: Assets/Scripts/Enemy.cs
@@ -349,6 +401,56 @@ Total: 3.801700 ms (FindLiveObjects: 0.238700 ms CreateObjectMapping: 0.107700 m
 
 Prepare: number of updated asset objects reloaded= 0
 >>>>>>> origin/Enemy
+=======
+Received Prepare
+Caller must complete domain reload
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.941 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.605 seconds
+Domain Reload Profiling: 1543ms
+	BeginReloadAssembly (612ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (472ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (35ms)
+	RebuildCommonClasses (29ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (34ms)
+	LoadAllAssembliesAndSetupDomain (251ms)
+		LoadAssemblies (296ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (30ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (11ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (606ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (452ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (3ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (74ms)
+			ProcessInitializeOnLoadAttributes (326ms)
+			ProcessInitializeOnLoadMethodAttributes (31ms)
+			AfterProcessingInitializeOnLoad (11ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (11ms)
+Refreshing native plugins compatible for Editor in 6.14 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3965 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 19 unused Assets / (31.2 KB). Loaded Objects now: 4464.
+Memory consumption went from 143.0 MB to 143.0 MB.
+Total: 3.609600 ms (FindLiveObjects: 0.291900 ms CreateObjectMapping: 0.124400 ms MarkObjects: 3.135900 ms  DeleteObjects: 0.055800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+>>>>>>> origin/kitami
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
   custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
@@ -364,6 +466,7 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
+<<<<<<< HEAD
 Received Import Request.
 <<<<<<< HEAD
   Time since last request: 639345.595243 seconds.
@@ -478,22 +581,43 @@ Mono: successfully reloaded assembly
 - Finished resetting the current domain, in  1.008 seconds
 Domain Reload Profiling: 1401ms
 	BeginReloadAssembly (134ms)
+=======
+Received Prepare
+Caller must complete domain reload
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.445 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.099 seconds
+Domain Reload Profiling: 1540ms
+	BeginReloadAssembly (141ms)
+>>>>>>> origin/kitami
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (9ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (31ms)
 	RebuildCommonClasses (27ms)
+<<<<<<< HEAD
 	RebuildNativeTypeToScriptingClass (9ms)
 	initialDomainReloadingComplete (28ms)
 	LoadAllAssembliesAndSetupDomain (195ms)
 		LoadAssemblies (249ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
 		AnalyzeDomain (12ms)
+=======
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (38ms)
+	LoadAllAssembliesAndSetupDomain (223ms)
+		LoadAssemblies (282ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (13ms)
+>>>>>>> origin/kitami
 			TypeCache.Refresh (6ms)
 				TypeCache.ScanAssembly (0ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (5ms)
+<<<<<<< HEAD
 	FinalizeReload (1008ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
@@ -515,6 +639,29 @@ Unloading 3964 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 19 unused Assets / (31.1 KB). Loaded Objects now: 4481.
 Memory consumption went from 142.6 MB to 142.6 MB.
 Total: 2.832100 ms (FindLiveObjects: 0.275400 ms CreateObjectMapping: 0.113200 ms MarkObjects: 2.391900 ms  DeleteObjects: 0.050600 ms)
+=======
+	FinalizeReload (1100ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (466ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (77ms)
+			ProcessInitializeOnLoadAttributes (336ms)
+			ProcessInitializeOnLoadMethodAttributes (32ms)
+			AfterProcessingInitializeOnLoad (10ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (12ms)
+Refreshing native plugins compatible for Editor in 6.16 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3965 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 19 unused Assets / (31.2 KB). Loaded Objects now: 4468.
+Memory consumption went from 143.1 MB to 143.0 MB.
+Total: 3.765400 ms (FindLiveObjects: 0.277300 ms CreateObjectMapping: 0.123700 ms MarkObjects: 3.310200 ms  DeleteObjects: 0.053100 ms)
+>>>>>>> origin/kitami
 
 Prepare: number of updated asset objects reloaded= 0
 AssetImportParameters requested are different than current active one (requested -> active):
@@ -528,15 +675,22 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
   custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
   custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+<<<<<<< HEAD
   custom:scripting/monoscript/fileName/Enemy.cs: 8448538d4f104f9acda18da16679c4ac -> 13cc614454c9ae28caa24456faa3d7cf
   custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:scripting/precompiled-assembly-types:Assembly-CSharp: 9ab3f32051617afc16c859d99e746c24 -> 622b880c1489cdd7f81dfb84b6af6df0
+=======
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+>>>>>>> origin/kitami
 ========================================================================
 Received Prepare
 Caller must complete domain reload
 Begin MonoManager ReloadAssembly
+<<<<<<< HEAD
 - Loaded All Assemblies, in  0.404 seconds
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
@@ -544,6 +698,14 @@ Mono: successfully reloaded assembly
 - Finished resetting the current domain, in  0.993 seconds
 Domain Reload Profiling: 1394ms
 	BeginReloadAssembly (141ms)
+=======
+- Loaded All Assemblies, in  0.451 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.039 seconds
+Domain Reload Profiling: 1484ms
+	BeginReloadAssembly (145ms)
+>>>>>>> origin/kitami
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (10ms)
 		BackupInstance (0ms)
@@ -551,6 +713,7 @@ Domain Reload Profiling: 1394ms
 		CreateAndSetChildDomain (30ms)
 	RebuildCommonClasses (29ms)
 	RebuildNativeTypeToScriptingClass (9ms)
+<<<<<<< HEAD
 	initialDomainReloadingComplete (28ms)
 	LoadAllAssembliesAndSetupDomain (194ms)
 		LoadAssemblies (255ms)
@@ -581,6 +744,38 @@ Unloading 3965 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 19 unused Assets / (31.1 KB). Loaded Objects now: 4485.
 Memory consumption went from 142.9 MB to 142.8 MB.
 Total: 3.320800 ms (FindLiveObjects: 0.365900 ms CreateObjectMapping: 0.283300 ms MarkObjects: 2.623500 ms  DeleteObjects: 0.046700 ms)
+=======
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (231ms)
+		LoadAssemblies (284ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (24ms)
+			TypeCache.Refresh (8ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (8ms)
+			ResolveRequiredComponents (6ms)
+	FinalizeReload (1040ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (439ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (77ms)
+			ProcessInitializeOnLoadAttributes (315ms)
+			ProcessInitializeOnLoadMethodAttributes (26ms)
+			AfterProcessingInitializeOnLoad (10ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (11ms)
+Refreshing native plugins compatible for Editor in 5.64 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3965 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 19 unused Assets / (31.1 KB). Loaded Objects now: 4472.
+Memory consumption went from 143.1 MB to 143.0 MB.
+Total: 3.127600 ms (FindLiveObjects: 0.287500 ms CreateObjectMapping: 0.121100 ms MarkObjects: 2.662600 ms  DeleteObjects: 0.055300 ms)
+>>>>>>> origin/kitami
 
 Prepare: number of updated asset objects reloaded= 0
 AssetImportParameters requested are different than current active one (requested -> active):
@@ -594,15 +789,22 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
   custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
   custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+<<<<<<< HEAD
   custom:scripting/monoscript/fileName/Enemy.cs: 8448538d4f104f9acda18da16679c4ac -> 13cc614454c9ae28caa24456faa3d7cf
   custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:scripting/precompiled-assembly-types:Assembly-CSharp: 9ab3f32051617afc16c859d99e746c24 -> 622b880c1489cdd7f81dfb84b6af6df0
+=======
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+>>>>>>> origin/kitami
 ========================================================================
 Received Prepare
 Caller must complete domain reload
 Begin MonoManager ReloadAssembly
+<<<<<<< HEAD
 - Loaded All Assemblies, in  0.406 seconds
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
@@ -827,6 +1029,24 @@ Domain Reload Profiling: 1475ms
 	initialDomainReloadingComplete (27ms)
 	LoadAllAssembliesAndSetupDomain (210ms)
 		LoadAssemblies (273ms)
+=======
+- Loaded All Assemblies, in  0.436 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.052 seconds
+Domain Reload Profiling: 1483ms
+	BeginReloadAssembly (145ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (11ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (31ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (213ms)
+		LoadAssemblies (276ms)
+>>>>>>> origin/kitami
 		RebuildTransferFunctionScriptingTraits (0ms)
 		AnalyzeDomain (12ms)
 			TypeCache.Refresh (6ms)
@@ -836,6 +1056,7 @@ Domain Reload Profiling: 1475ms
 	FinalizeReload (1052ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
+<<<<<<< HEAD
 		SetupLoadedEditorAssemblies (463ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (18ms)
@@ -1335,6 +1556,26 @@ Unloading 3965 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 19 unused Assets / (31.1 KB). Loaded Objects now: 4529.
 Memory consumption went from 142.9 MB to 142.9 MB.
 Total: 3.567300 ms (FindLiveObjects: 0.403200 ms CreateObjectMapping: 0.130900 ms MarkObjects: 2.978600 ms  DeleteObjects: 0.053200 ms)
+=======
+		SetupLoadedEditorAssemblies (445ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (75ms)
+			ProcessInitializeOnLoadAttributes (321ms)
+			ProcessInitializeOnLoadMethodAttributes (30ms)
+			AfterProcessingInitializeOnLoad (8ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (11ms)
+Refreshing native plugins compatible for Editor in 5.89 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3965 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 19 unused Assets / (31.2 KB). Loaded Objects now: 4476.
+Memory consumption went from 143.1 MB to 143.0 MB.
+Total: 3.200400 ms (FindLiveObjects: 0.282500 ms CreateObjectMapping: 0.115800 ms MarkObjects: 2.754100 ms  DeleteObjects: 0.047000 ms)
+>>>>>>> origin/kitami
 
 Prepare: number of updated asset objects reloaded= 0
 AssetImportParameters requested are different than current active one (requested -> active):
@@ -1348,6 +1589,7 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
   custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
   custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+<<<<<<< HEAD
   custom:scripting/monoscript/fileName/Enemy.cs: 557636673865ff53c1268fb7ac755d02 -> 13cc614454c9ae28caa24456faa3d7cf
   custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
@@ -1382,3 +1624,8 @@ Start importing Assets/Scenes/GameScene.unity using Guid(2cda990e2423bbf4892e659
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
 >>>>>>> origin/Enemy
+=======
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+>>>>>>> origin/kitami
