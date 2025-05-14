@@ -74,7 +74,7 @@ public class KusaGrower : MonoBehaviour
 
             // 
             Vector2 checkSize = new Vector2(leafWidth * 0.95f, leafHeight * 0.95f);
-            Collider2D hit = Physics2D.OverlapBox(nextPos, checkSize, 0f, LayerMask.GetMask("Ground"));
+            Collider2D hit = Physics2D.OverlapBox(nextPos, checkSize, 0f, LayerMask.GetMask("Ground","Ignore Raycast"));
             if (hit != null)
             {
                 Debug.Log("Hit wall at " + nextPos);

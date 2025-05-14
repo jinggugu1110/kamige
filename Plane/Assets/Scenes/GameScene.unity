@@ -1755,7 +1755,7 @@ Transform:
   m_GameObject: {fileID: 615862689}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: 0.71, z: 0}
+  m_LocalPosition: {x: -0.04, y: 0.23, z: 0}
   m_LocalScale: {x: 2.4811683, y: 1.1387666, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2420,7 +2420,7 @@ Transform:
   m_GameObject: {fileID: 1060833962}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.43, y: -1.88, z: 0}
+  m_LocalPosition: {x: -7.74, y: -2.06, z: 0}
   m_LocalScale: {x: 1.3389626, y: 0.544786, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2712,7 +2712,7 @@ Transform:
   m_GameObject: {fileID: 1222308568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.39, y: -2.3, z: 0}
+  m_LocalPosition: {x: -7.7, y: -3.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.47735, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3020,7 +3020,7 @@ GameObject:
   - component: {fileID: 1296274870}
   - component: {fileID: 1296274869}
   - component: {fileID: 1296274868}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Spikemap
   m_TagString: Spikes
   m_Icon: {fileID: 0}
@@ -3531,7 +3531,7 @@ GameObject:
   - component: {fileID: 1532944207}
   - component: {fileID: 1532944206}
   - component: {fileID: 1532944210}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Tilemap
   m_TagString: Ground
   m_Icon: {fileID: 0}
