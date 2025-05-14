@@ -9,9 +9,13 @@ TagManager:
   - Attachable
   - SabPlayer
   - PostIt
+<<<<<<< HEAD
   - conflictPostIt
   - nonconflictPostIt
   - grass
+=======
+  - Enemy
+>>>>>>> origin/Enemy
   layers:
   - Default
   - TransparentFX
