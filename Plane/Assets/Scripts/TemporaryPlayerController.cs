@@ -119,7 +119,7 @@ public class TemporaryPlayerController : MonoBehaviour
     private void CheckCollisions()
     {
         float rayDistance = 0.1f;
-        LayerMask groundLayer = LayerMask.GetMask("Ground");
+        LayerMask groundLayer = LayerMask.GetMask("Ground", "Grass","Ignore Raycast");
 
         bool useSide = rb.gravityScale == 0;
 
@@ -146,7 +146,7 @@ public class TemporaryPlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("grass"))
         {
             onGround = true;
             isJumping = false;
