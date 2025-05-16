@@ -3,29 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Ground
-  - Spikes
-  - Attachable
-  - SabPlayer
-  - PostIt
-<<<<<<< HEAD
-  - conflictPostIt
-  - nonconflictPostIt
-  - grass
-=======
-  - Enemy
->>>>>>> origin/Enemy
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - 
   - Water
   - UI
-  - PostIt
-  - Ground
-  - Grass
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -52,13 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Ground
-    uniqueID: 1838560243
-    locked: 0
-  - name: PostIt
-    uniqueID: 1626863907
-    locked: 0
-  - name: Player
-    uniqueID: 4151291583
     locked: 0

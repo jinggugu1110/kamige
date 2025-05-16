@@ -168,8 +168,9 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Respawn()
-    {
+    {/*
         transform.position = initialPosition;
         rb.velocity = Vector2.zero;
-    }
+    */
+        }
 }
