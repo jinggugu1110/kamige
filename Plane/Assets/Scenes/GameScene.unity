@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 197123056}
   - component: {fileID: 197123055}
   - component: {fileID: 197123054}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: leaf
   m_TagString: grass
   m_Icon: {fileID: 0}
@@ -1592,7 +1592,7 @@ GameObject:
   - component: {fileID: 615862692}
   - component: {fileID: 615862691}
   - component: {fileID: 615862690}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: SwitchPlayerPostIt
   m_TagString: nonconflictPostIt
   m_Icon: {fileID: 0}
@@ -1756,7 +1756,7 @@ Transform:
   m_GameObject: {fileID: 615862689}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: 0.23, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0.49, z: 0}
   m_LocalScale: {x: 2.4811683, y: 1.1387666, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2713,7 +2713,7 @@ Transform:
   m_GameObject: {fileID: 1222308568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.7, y: -3.5, z: 0}
+  m_LocalPosition: {x: -7.73, y: -3.67, z: 0}
   m_LocalScale: {x: 0.5, y: 0.47735, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14352,7 +14352,7 @@ GameObject:
   - component: {fileID: 1845407051}
   - component: {fileID: 1845407050}
   - component: {fileID: 1845407053}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: Grass
   m_TagString: grass
   m_Icon: {fileID: 0}
