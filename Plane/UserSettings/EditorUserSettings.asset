@@ -6,13 +6,24 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
+<<<<<<< HEAD
       value: 575402025007585d5f595c2749725d44174f4b2c7b2d723175701f66b2b96039
+=======
+      value: 5204055e075451595b5f08724820074447164b2e792c7e34282c4f6bb2b73039
+      flags: 0
+    RecentlyUsedSceneGuid-1:
+      value: 0552025f040c0b0c0f5f0e2047760d44154f1e797c7f70312f2c4d62b2b7306f
+>>>>>>> origin/kitami
       flags: 0
     RecentlyUsedSceneGuid-1:
       value: 510355005051085a5e0b5d7343200a44464f1c2b752a2432757c1c62bae4653a
       flags: 0
     RecentlyUsedSceneGuid-2:
+<<<<<<< HEAD
       value: 5555525254530b0a595a5977167a5e44444f1e7b757f72332c7f4f62b6b13768
+=======
+      value: 575402025007585d5f595c2749725d44174f4b2c7b2d723175701f66b2b96039
+>>>>>>> origin/kitami
       flags: 0
     RecentlyUsedSceneGuid-3:
       value: 515250075c0c595e5f5a5e71122159444e4e4a2f7a7d7f602f284d66b4b76661
