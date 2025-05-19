@@ -10,6 +10,8 @@ public class SceneLoader : MonoBehaviour
         if (collision.CompareTag("Player")) // プレイヤーがゴールに触れたら
         {
             SceneManager.LoadScene(nextSceneName); // 指定したシーンに遷移
+
+
         }
     }
 }
