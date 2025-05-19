@@ -58,10 +58,10 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
 
-        if (transform.position.y < -10f || transform.position.x < -10f || transform.position.x > 10f)
-        {
-            Respawn();
-        }
+        //if (transform.position.y < -10f || transform.position.x < -10f || transform.position.x > 10f)
+        //{
+        //    Respawn();
+        //}
     }
 
     private void HandleMovement()
