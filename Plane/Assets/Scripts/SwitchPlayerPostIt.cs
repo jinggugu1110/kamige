@@ -56,7 +56,11 @@ public class SwitchPlayerPostIt : MonoBehaviour
             }
 
             // ’Ç]‚ğ‰ğœ
-            transform.SetParent(null);
+            // ˆÀ‘S‚Ée‚ğŠO‚·
+            if (transform.parent != null && transform.parent.gameObject.activeInHierarchy)
+            {
+                transform.SetParent(null);
+            }
             targetObject = null;
             isActive = false;
         }
