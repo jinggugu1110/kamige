@@ -26,8 +26,10 @@ public class SwitchPlayerPostIt : MonoBehaviour
                 player.canMove = true;
             }
 
+
             // この付箋をターゲットに追従させる
             transform.SetParent(targetObject.transform);
+           
             isActive = true;
         }
     }
@@ -54,6 +56,21 @@ public class SwitchPlayerPostIt : MonoBehaviour
             transform.SetParent(null);
             targetObject = null;
             isActive = false;
+        }
+    }
+
+    //マウスボタンが離されたときに呼ばれる
+    // これにより、マウスボタンを離したときにカメラのターゲットを切り替えることができます
+    private void OnMouseUp()
+    {
+        if (isActive && targetObject != null)
+        {
+            // カメラを貼り付いたオブジェクトに切り替え
+            CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+            if (cam != null)
+            {
+                cam.SetTarget(targetObject.transform);
+            }
         }
     }
 }
