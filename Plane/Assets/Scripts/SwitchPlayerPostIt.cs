@@ -12,7 +12,8 @@ public class SwitchPlayerPostIt : MonoBehaviour
             // 貼り付け対象を記録
             targetObject = other.gameObject;
 
-           
+            // レイヤー切り替え
+            targetObject.layer = LayerMask.NameToLayer("Default");
 
             // ターゲットに TemporaryPlayerController があれば有効化
             if (targetObject.TryGetComponent(out TemporaryPlayerController temp))
@@ -38,7 +39,9 @@ public class SwitchPlayerPostIt : MonoBehaviour
     {
         if (isActive && other.gameObject == targetObject)
         {
-           
+            // レイヤー戻す
+            targetObject.layer = LayerMask.NameToLayer("PlayerJump");
+
 
             // 一時プレイヤー操作を終了
             if (targetObject.TryGetComponent(out TemporaryPlayerController temp))

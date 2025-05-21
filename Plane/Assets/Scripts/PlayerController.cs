@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
     private void CheckCollisions()
     {
         float rayDistance = 0.1f;
-        LayerMask groundLayer = LayerMask.GetMask("Ground", "Grass", "Ignore Raycast");
+        LayerMask groundLayer = LayerMask.GetMask("Ground", "Grass", "PlayerJump", "Ignore Raycast");
 
         bool useSide = rb.gravityScale == 0;
 
