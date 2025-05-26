@@ -16,7 +16,10 @@ TagManager:
   - nonconflictPostIt
   - grass
   - Enemy
+<<<<<<< HEAD
 >>>>>>> origin/kitami
+=======
+>>>>>>> origin/kishimoto
   layers:
   - Default
   - TransparentFX
@@ -34,7 +37,10 @@ TagManager:
   - Ground
   - Grass
   - PlayerJump
+<<<<<<< HEAD
 >>>>>>> origin/kitami
+=======
+>>>>>>> origin/kishimoto
   - 
   - 
   - 

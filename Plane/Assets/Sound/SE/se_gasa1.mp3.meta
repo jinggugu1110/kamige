@@ -1,9 +1,13 @@
 fileFormatVersion: 2
 <<<<<<< HEAD
+<<<<<<< HEAD
 guid: a22ac2bd7ffb3b34a83ee3acb23a89d0
 =======
 guid: 7fc1f45ba2dd1354eab5af82e025188e
 >>>>>>> origin/kitami
+=======
+guid: 7fc1f45ba2dd1354eab5af82e025188e
+>>>>>>> origin/kishimoto
 AudioImporter:
   externalObjects: {}
   serializedVersion: 7
