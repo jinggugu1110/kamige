@@ -9,6 +9,9 @@ TagManager:
   - Attachable
   - SabPlayer
   - PostIt
+  - conflictPostIt
+  - nonconflictPostIt
+  - grass
   - Enemy
   layers:
   - Default
@@ -20,7 +23,7 @@ TagManager:
   - PostIt
   - Ground
   - Grass
-  - 
+  - PlayerJump
   - 
   - 
   - 

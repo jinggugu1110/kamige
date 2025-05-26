@@ -42,8 +42,14 @@ public class GravityFlipPostIt : MonoBehaviour
     {
         if (other.GetComponent<Rigidbody2D>() == targetRb)
         {
-            ResetGravity();
-            transform.SetParent(null);
+            ResetGravity();        
+            
+            // à¿ëSÇ…êeÇäOÇ∑
+            if (transform.parent != null && transform.parent.gameObject.activeInHierarchy)
+            {
+                transform.SetParent(null);
+            }
+            
             targetRb = null;
             touchTime = 0.0f;
         }

@@ -10,24 +10,49 @@ public class KusaGrower : MonoBehaviour
 
     private List<GameObject> grownLeaves = new List<GameObject>();
     private bool isGrown = false;
+    private Vector3 growDirection = Vector3.right; // default right
+    private Vector3 GetDirectionFromAngle(float angleZ)
 
-    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isGrown && collision.gameObject.layer == LayerMask.NameToLayer("PostIt"))
-        {
-            GrowLeaves();
-            isGrown = true;
-        }
+        angleZ = Mathf.Round(angleZ) % 360; // 防止小数误差
+
+        if (angleZ == 270f)
+            return Vector3.right;
+        else if (angleZ == 0f)
+            return Vector3.up;
+        else if (angleZ == 90f)
+            return Vector3.left;
+        else if (angleZ == 180f)
+            return Vector3.down;
+        else
+            return Vector3.right; // fallback
     }
 
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        if (isGrown && collision.gameObject.layer == LayerMask.NameToLayer("PostIt"))
-        {
-            ClearLeaves();
-            isGrown = false;
-        }
-    }
+    //Updateで行うのでコメントアウト
+    //void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (!isGrown && collision.gameObject.layer == LayerMask.NameToLayer("PostIt"))
+    //    {
+    //        //获取旋转角度并转换为方向
+    //        float angleZ = collision.transform.eulerAngles.z;
+    //        growDirection = GetDirectionFromAngle(angleZ);
+
+    //        GrowLeaves();
+    //        isGrown = true;
+    //    }
+    //}
+
+    //void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    if (isGrown && collision.gameObject.layer == LayerMask.NameToLayer("PostIt"))
+    //    {
+    //        ClearLeaves();
+    //        isGrown = false;
+    //    }
+    //}
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,27 +60,74 @@ public class KusaGrower : MonoBehaviour
     }
 
     // Update is called once per frame
+    private float prevAngleZ = -1f; // 以前の角度を保持する（初期値は -1）
+
     void Update()
     {
-        
+        // PostIt に触れているか判定
+        Collider2D hit = Physics2D.OverlapBox(transform.position, new Vector2(1f, 1f), 0f, LayerMask.GetMask("PostIt"));
+
+        if (hit != null)
+        {
+            float angleZ = hit.transform.eulerAngles.z;
+
+            // 角度が変化していたらリセット＆再生成
+            if (!isGrown || Mathf.Round(angleZ) != Mathf.Round(prevAngleZ))
+            {
+                prevAngleZ = angleZ; // 以前の角度を更新
+                growDirection = GetDirectionFromAngle(angleZ);
+
+                ClearLeaves();  // 古い葉を削除
+                GrowLeaves();   // 新しく葉を生やす
+                isGrown = true;
+            }
+        }
+        else
+        {
+            // 触れていない場合は削除
+            if (isGrown)
+            {
+                ClearLeaves();
+                isGrown = false;
+                prevAngleZ = -1f; // 角度をリセット
+            }
+        }
     }
+
+
     void GrowLeaves()
     {
-        Vector3 startPos = transform.position;
+        float kusaWidth = 1.0f;
+        float leafWidth = leafPrefab.GetComponent<SpriteRenderer>().bounds.size.x;
+        float leafHeight = leafPrefab.GetComponent<SpriteRenderer>().bounds.size.y;
 
-        for (int i = 1; i <= maxLeafCount; i++)
+        Vector3 startEdge = transform.position + growDirection * (kusaWidth / 2);
+
+
+        for (int i = 0; i <= maxLeafCount; i++)
         {
-            Vector3 nextPos = startPos + Vector3.right * leafSpacing * i;
+            Vector3 nextPos = startEdge + growDirection * (leafWidth * i + leafWidth / 2);
 
-            // ⛔ 
-            Collider2D hit = Physics2D.OverlapCircle(nextPos, 0.3f, LayerMask.GetMask("Ground"));
+            // 
+            Vector2 checkSize = new Vector2(leafWidth * 0.95f, leafHeight * 0.95f);
+            Collider2D hit = Physics2D.OverlapBox(nextPos, checkSize, 0f, LayerMask.GetMask("Ground", "Ignore Raycast"));
             if (hit != null)
             {
                 Debug.Log("Hit wall at " + nextPos);
                 break;
             }
 
-            GameObject newLeaf = Instantiate(leafPrefab, nextPos, Quaternion.identity, transform);
+            Quaternion rotation = Quaternion.identity;
+            // 根据方向决定旋转角度
+            if (growDirection == Vector3.up)
+                rotation = Quaternion.Euler(0, 0, 90);
+            else if (growDirection == Vector3.left)
+                rotation = Quaternion.Euler(0, 0, 180);
+            else if (growDirection == Vector3.down)
+                rotation = Quaternion.Euler(0, 0, 270);
+            // 向右就默认 0
+
+            GameObject newLeaf = Instantiate(leafPrefab, nextPos, rotation, transform);
             grownLeaves.Add(newLeaf);
         }
     }
@@ -69,4 +141,3 @@ public class KusaGrower : MonoBehaviour
         grownLeaves.Clear();
     }
 }
-

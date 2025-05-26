@@ -33,11 +33,7 @@ public class DraggableObject : MonoBehaviour
 
     void Update()
     {
-        //// `R` キーを押したら 90° 回転
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    RotateObject();
-        //}
+
         // マウスが上にあるときだけRキーで回転
         if (isMouseOver && Input.GetKeyDown(KeyCode.R))
         {
