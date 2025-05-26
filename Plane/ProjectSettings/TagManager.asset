@@ -3,7 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
+<<<<<<< HEAD
   tags: []
+=======
+  tags:
+  - Ground
+  - Spikes
+  - Attachable
+  - SabPlayer
+  - PostIt
+  - conflictPostIt
+  - nonconflictPostIt
+  - grass
+  - Enemy
+>>>>>>> origin/kitami
   layers:
   - Default
   - TransparentFX
@@ -11,10 +24,17 @@ TagManager:
   - 
   - Water
   - UI
+<<<<<<< HEAD
   - 
   - 
   - 
   - 
+=======
+  - PostIt
+  - Ground
+  - Grass
+  - PlayerJump
+>>>>>>> origin/kitami
   - 
   - 
   - 
