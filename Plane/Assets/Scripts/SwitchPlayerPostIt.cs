@@ -12,7 +12,8 @@ public class SwitchPlayerPostIt : MonoBehaviour
             // 貼り付け対象を記録
             targetObject = other.gameObject;
 
-           
+            // レイヤー切り替え
+            targetObject.layer = LayerMask.NameToLayer("Default");
 
             // ターゲットに TemporaryPlayerController があれば有効化
             if (targetObject.TryGetComponent(out TemporaryPlayerController temp))
@@ -26,8 +27,10 @@ public class SwitchPlayerPostIt : MonoBehaviour
                 player.canMove = true;
             }
 
+
             // この付箋をターゲットに追従させる
             transform.SetParent(targetObject.transform);
+           
             isActive = true;
         }
     }
@@ -36,7 +39,9 @@ public class SwitchPlayerPostIt : MonoBehaviour
     {
         if (isActive && other.gameObject == targetObject)
         {
-           
+            // レイヤー戻す
+            targetObject.layer = LayerMask.NameToLayer("PlayerJump");
+
 
             // 一時プレイヤー操作を終了
             if (targetObject.TryGetComponent(out TemporaryPlayerController temp))
@@ -51,9 +56,28 @@ public class SwitchPlayerPostIt : MonoBehaviour
             }
 
             // 追従を解除
-            transform.SetParent(null);
+            // 安全に親を外す
+            if (transform.parent != null && transform.parent.gameObject.activeInHierarchy)
+            {
+                transform.SetParent(null);
+            }
             targetObject = null;
             isActive = false;
+        }
+    }
+
+    //マウスボタンが離されたときに呼ばれる
+    // これにより、マウスボタンを離したときにカメラのターゲットを切り替えることができます
+    private void OnMouseUp()
+    {
+        if (isActive && targetObject != null)
+        {
+            // カメラを貼り付いたオブジェクトに切り替え
+            CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+            if (cam != null)
+            {
+                cam.SetTarget(targetObject.transform);
+            }
         }
     }
 }

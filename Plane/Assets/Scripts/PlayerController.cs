@@ -58,10 +58,10 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
 
-        if (transform.position.y < -10f || transform.position.x < -10f || transform.position.x > 10f)
-        {
-            Respawn();
-        }
+        //if (transform.position.y < -10f || transform.position.x < -10f || transform.position.x > 10f)
+        //{
+        //    Respawn();
+        //}
     }
 
     private void HandleMovement()
@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
     private void CheckCollisions()
     {
         float rayDistance = 0.1f;
-        LayerMask groundLayer = LayerMask.GetMask("Ground", "Grass");
+        LayerMask groundLayer = LayerMask.GetMask("Ground", "Grass", "PlayerJump", "Ignore Raycast");
 
         bool useSide = rb.gravityScale == 0;
 
