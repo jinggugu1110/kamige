@@ -1,9 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Plane/Assets/Scenes/Stage1-2.unity.meta
 <<<<<<< HEAD
 guid: 22af5daa3e113c5408da9bbb85a18d1b
 =======
 guid: 2cda990e2423bbf4892e6590ba056729
 >>>>>>> origin/kishimoto
+=======
+guid: 8d557c748a0934b4f8bac85bb58da2c7
+>>>>>>> origin/kitami:Plane/Assets/Scenes/1-2.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
