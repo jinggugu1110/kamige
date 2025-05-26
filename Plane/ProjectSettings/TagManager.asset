@@ -12,6 +12,7 @@ TagManager:
   - conflictPostIt
   - nonconflictPostIt
   - grass
+  - Enemy
   layers:
   - Default
   - TransparentFX
