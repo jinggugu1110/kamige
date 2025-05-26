@@ -8,10 +8,22 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /*
- * 体をリストで追加
- * 体の反転
- * 体が回復⇒通常に戻る時、書くつくのを解消
+ 移動処理は鎖で引っ張ってるイメージです
+
  */
+
+/*課題　めも
+ * 体をリストで追加できるようにする
+ * 体の左右反転処理いれる
+ * 重力フセンの影響をウケてるときに、そのフセンがしっぽに当たると気絶してしまう
+ ⇒前はTailTriggerで気絶処理を読んでたが、影響をウケている最中なのか判定できないため、
+あらたにPostItTriggerクラスを作って気絶処理を読んでみたが失敗。惜しい？かも。
+
+次試すこと
+istakeGravity bool変数を各体につけて、フセンからtrueにする。⇒TailTrigger内でrootでistakeGravityがtrueか探索して trueなら無効にする？
+
+ */
+
 
 public class Enemy : MonoBehaviour
 {
@@ -38,6 +50,8 @@ public class Enemy : MonoBehaviour
     [Header("気絶設定")]
     public float stunTime = 3.0f;        // 気絶している時間
     float stretchAnimSpeed = 0.1f;        // 伸びるアニメーションの速さ
+    private List<TriggerChecker> bodyTriggers = new List<TriggerChecker>();
+
 
     // 気絶関連の変数
     private bool isStunned = false;          // 気絶中か
@@ -60,8 +74,8 @@ public class Enemy : MonoBehaviour
         //bodyの1/3が重なる
         float bodyWidth = BodyPrefab.transform.localScale.x;
         float stepPerFrame = moveSpeed * Time.fixedDeltaTime;
-        // Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
-        Gap = Mathf.RoundToInt((bodyWidth * 0.7f) / stepPerFrame);
+         Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
+        //Gap = Mathf.RoundToInt((bodyWidth * 0.7f) / stepPerFrame);
 
         for (int i = 0; i < bodyCount; i++)
         {
@@ -115,12 +129,6 @@ public class Enemy : MonoBehaviour
         //    // 気絶中は停止
         //    rb.velocity = Vector2.zero;
         //}
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Debug.Log("キー入力で気絶");
-            OnTailHit(); // テスト用に手動で気絶
-        }
 
         if (!isStunned && !isRecovering)
         {

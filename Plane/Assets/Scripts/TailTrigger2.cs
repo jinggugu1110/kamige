@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class TailTrigger : MonoBehaviour
+public class TailTrigger2 : MonoBehaviour
 {
-    public global::Enemy enemy;
+    public global::Enemy2 enemy;
     private bool movingRight = true;
     private float wallCheckDistance = 0.6f;
     private LayerMask wallLayer;
@@ -14,13 +13,13 @@ public class TailTrigger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -32,12 +31,10 @@ public class TailTrigger : MonoBehaviour
             {
                 return;
             }
-            else if (other.transform.root == this.transform.root)// 自分の親がEnemyと一致していれば無視（＝自分自身に当たった）
+
+            if (enemy != null)
             {
-                return;
-            }else if (enemy != null)
-            {
-                //enemy.OnTailHit();
+                enemy.OnTailHit();
             }
         }
     }
