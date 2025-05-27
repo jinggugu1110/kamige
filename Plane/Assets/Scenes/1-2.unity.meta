@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 <<<<<<< HEAD:Plane/Assets/Scenes/Stage1-2.unity.meta
 <<<<<<< HEAD
 guid: 22af5daa3e113c5408da9bbb85a18d1b
@@ -8,6 +9,13 @@ guid: 2cda990e2423bbf4892e6590ba056729
 =======
 guid: 8d557c748a0934b4f8bac85bb58da2c7
 >>>>>>> origin/kitami:Plane/Assets/Scenes/1-2.unity.meta
+=======
+<<<<<<<< HEAD:Plane/Assets/Scenes/GameScene 1.unity.meta
+guid: 8e7ece37adfea2d47b01e9d3375face5
+========
+guid: 8d557c748a0934b4f8bac85bb58da2c7
+>>>>>>>> e47c340 (no message):Plane/Assets/Scenes/1-2.unity.meta
+>>>>>>> e47c340 (no message)
 DefaultImporter:
   externalObjects: {}
   userData: 

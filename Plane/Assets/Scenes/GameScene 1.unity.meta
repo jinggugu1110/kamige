@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Plane/Assets/Scenes/GameScene 1.unity.meta
 guid: 8e7ece37adfea2d47b01e9d3375face5
+========
+guid: 8d557c748a0934b4f8bac85bb58da2c7
+>>>>>>>> e47c340 (no message):Plane/Assets/Scenes/1-2.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
