@@ -8,7 +8,7 @@ public class PoponTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && currentPopon == null)
+        if (other.CompareTag("nonconflictPostIt") && currentPopon == null)
         {
             currentPopon = Instantiate(poponPrefab, spawnPoint.position, Quaternion.identity);
         }
@@ -16,7 +16,7 @@ public class PoponTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && currentPopon != null)
+        if (other.CompareTag("nonconflictPostIt") && currentPopon != null)
         {
             Destroy(currentPopon);
         }

@@ -15,7 +15,7 @@ public class poyoController : MonoBehaviour
         //プレイヤー参照を取得設定されていなければプレイヤータグをもったオブジェクトを自動取得
         if (player == null)
         {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            GameObject playerObj = GameObject.FindGameObjectWithTag("nonconflictPostIt");
             if (playerObj != null)
             {
                 player = playerObj.transform;
