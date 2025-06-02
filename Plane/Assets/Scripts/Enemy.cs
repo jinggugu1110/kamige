@@ -40,9 +40,11 @@ public class Enemy : MonoBehaviour
     private Collider2D HeadCol;//当たり判定を避けさせるため、頭と体を分ける
 
     private bool movingRight = true;//進む方向
-    public int bodyCount = 4;
+    private int bodyCount = 4;
     public GameObject BodyPrefab;
-    private List<GameObject> BodyParts = new List<GameObject>();
+   // private List<GameObject> BodyParts = new List<GameObject>();
+    public List<GameObject> BodyParts = new List<GameObject>(); // インスペクターで手動追加
+
     private Collider2D tailCollider;
     private List<Vector3> PositionHistory = new List<Vector3>();
     private float Gap;//体の感覚
@@ -105,31 +107,6 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //if (!isStunned && !isRecovering)
-        //{
-        //    // 通常の動作時（スタンや回復中でない）
-        //    Move();
-        //    CheckWall();
-        //}
-        //else if (isRecovering)
-        //{
-        //    // 回復中は頭は固定したまま、体のパーツはRecoverFromStun内で移動
-        //    // 頭の移動を無効化
-        //    rb.velocity = Vector2.zero;
-
-        //    // 位置履歴は更新する（RecoverFromStun内でも更新しているが、念のため）
-        //    PositionHistory.Insert(0, transform.position);
-        //    if (PositionHistory.Count > 100)
-        //    {
-        //        PositionHistory.RemoveAt(PositionHistory.Count - 1);
-        //    }
-        //}
-        //else
-        //{
-        //    // 気絶中は停止
-        //    rb.velocity = Vector2.zero;
-        //}
-
         if (!isStunned && !isRecovering)
         {
             Move();
@@ -217,43 +194,42 @@ public class Enemy : MonoBehaviour
     private void MoveBodyParts()
     {
         // 配列の境界チェック用の最大インデックス
-        //int maxHistoryIndex = PositionHistory.Count - 1;
-
-        //for (int i = 0; i < BodyParts.Count; i++)
-        //{
-        //    // 安全なインデックス計算
-        //    int historyIndex = (int)Mathf.Min(i * Gap, maxHistoryIndex);
-        //    Vector3 targetPosition = PositionHistory[historyIndex];
-
-        //    // スムーズな移動を実装
-        //    float smoothFactor = 15f; // 調整可能なスムーズさ係数
-        //    BodyParts[i].transform.position = Vector3.Lerp(
-        //        BodyParts[i].transform.position,
-        //        targetPosition,
-        //        Time.deltaTime * smoothFactor
-        //    );
-        //}
-
-        float maxDistance = 0.6f; // セグメント間の最大距離
-        float minDistance = 0.1f; // セグメント間の最小距離
-        Vector3 prevPos = transform.position; // 頭の位置
+        int maxHistoryIndex = PositionHistory.Count - 1;
 
         for (int i = 0; i < BodyParts.Count; i++)
         {
-            Vector3 curPos = BodyParts[i].transform.position;
-            Vector3 delta = curPos - prevPos;
-            float dist = delta.magnitude;
+            int historyIndex = (int)Mathf.Min((i + 1) * Gap, maxHistoryIndex);
+            Vector3 targetPosition = PositionHistory[historyIndex];
 
-            if (dist > maxDistance || dist < minDistance)
-            {
-                float clampedDist = Mathf.Clamp(dist, minDistance, maxDistance);
-                Vector3 dir = delta.normalized;
-                Vector3 targetPos = prevPos + dir * clampedDist;
-                BodyParts[i].transform.position = Vector3.Lerp(curPos, targetPos, 0.5f); // 少しだけ引っ張る感じ
-            }
-
-            prevPos = BodyParts[i].transform.position;
+            // スムーズな移動を実装
+            float smoothFactor = 15f; //スムーズさ係数
+            BodyParts[i].transform.position = Vector3.Lerp(
+                BodyParts[i].transform.position,
+                targetPosition,
+                Time.deltaTime * smoothFactor
+            );
         }
+
+        //float maxDistance = 0.6f; // セグメント間の最大距離
+        //float minDistance = 0.1f; // セグメント間の最小距離
+        //Vector3 prevPos = transform.position; // 頭の位置
+
+        //for (int i = 0; i < BodyParts.Count; i++)
+        //{
+        //    Vector3 curPos = BodyParts[i].transform.position;
+        //    Vector3 delta = curPos - prevPos;
+        //    float dist = delta.magnitude;
+
+        //    if (dist > maxDistance || dist < minDistance)
+        //    {
+        //        float clampedDist = Mathf.Clamp(dist, minDistance, maxDistance);
+        //        Vector3 dir = delta.normalized;
+        //        Vector3 targetPos = prevPos + dir * clampedDist;
+        //        BodyParts[i].transform.position = Vector3.Lerp(curPos, targetPos, 0.5f); // 少しだけ引っ張る感じ
+        //    }
+
+        //    prevPos = BodyParts[i].transform.position;
+        //}
     }
 
     // ======= 壁検知 =======
@@ -292,15 +268,27 @@ public class Enemy : MonoBehaviour
     // ======= 体を生成 =======
     private void GrowBody()
     {
-        GameObject body = Instantiate(BodyPrefab);
-        BodyParts.Add(body);//リストに追加
+        //GameObject body = Instantiate(BodyPrefab);
+        //BodyParts.Add(body);//リストに追加
 
-        // 衝突を無効化（自分の頭とのみ）
-        Collider2D bodyCol = body.GetComponent<Collider2D>();
-        if (HeadCol != null && bodyCol != null)
+        //// 衝突を無効化（自分の頭とのみ）
+        //Collider2D bodyCol = body.GetComponent<Collider2D>();
+        //if (HeadCol != null && bodyCol != null)
+        //{
+        //    // bodyCol.isTrigger = (BodyParts.Count == bodyCount);//()条件文で,最後尻だけtrueにする
+        //    Physics2D.IgnoreCollision(HeadCol, bodyCol);
+        //}
+
+
+        foreach (GameObject bodyPart in BodyParts)
         {
-            // bodyCol.isTrigger = (BodyParts.Count == bodyCount);//()条件文で,最後尻だけtrueにする
-            Physics2D.IgnoreCollision(HeadCol, bodyCol);
+            if (bodyPart == null) continue;
+
+            Collider2D bodyCollider = bodyPart.GetComponent<Collider2D>();
+            if (bodyCollider != null)
+            {
+                Physics2D.IgnoreCollision(HeadCol, bodyCollider);
+            }
         }
     }
 

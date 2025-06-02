@@ -37,7 +37,7 @@ public class TailTrigger : MonoBehaviour
                 return;
             }else if (enemy != null)
             {
-                //enemy.OnTailHit();
+                enemy.OnTailHit();
             }
         }
     }
