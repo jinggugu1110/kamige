@@ -34,7 +34,7 @@ public class poyoController : MonoBehaviour
         }
 
         // Layer§Œä "Enemy" ‚Í Layer 10A"Ground" ‚Í Layer 7j
-        Physics2D.IgnoreLayerCollision(10, 7); //"Enemy" ‚Æ "Ground" ‚ÌÕ“Ë‚ğ–³‹
+        Physics2D.IgnoreLayerCollision(10, 2); //"Enemy" ‚Æ "Ground" ‚ÌÕ“Ë‚ğ–³‹
     }
 
     void Update()

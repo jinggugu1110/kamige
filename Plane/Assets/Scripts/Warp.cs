@@ -9,8 +9,8 @@ public class Warp : MonoBehaviour
 {
     Transform Warp_OutPoint;
     private bool OutisinStage = false; //出口がステージ内にあればtrue
-    private float minX = -10f;
-    private float maxX = 10f;
+    private float minX = -1000f;
+    private float maxX = 1000f;
     private float minY = -10f;
     private HashSet<GameObject> WarpedList = new HashSet<GameObject>(); //ワープ済みリスト。HashSetは「重複しない要素」を格納する。
     private float warpCooldown = 0.5f; // ワープのクールダウン時間
