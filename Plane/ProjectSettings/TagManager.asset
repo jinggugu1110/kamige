@@ -11,11 +11,19 @@ TagManager:
   - 
   - Water
   - UI
+<<<<<<< HEAD
   - 
   - 
   - 
   - 
   - 
+=======
+  - PostIt
+  - Ground
+  - Grass
+  - PlayerJump
+  - Enemy
+>>>>>>> origin/kitami
   - 
   - 
   - 
