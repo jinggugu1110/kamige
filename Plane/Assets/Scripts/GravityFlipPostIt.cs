@@ -10,7 +10,7 @@ public class GravityFlipPostIt : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Attachable"))
+        if (other.CompareTag("Player") || other.CompareTag("Attachable")|| other.CompareTag("Enemy"))
         {
             if (targetRb == null)
             {
@@ -25,7 +25,7 @@ public class GravityFlipPostIt : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if ((other.CompareTag("Player") || other.CompareTag("Attachable")) && targetRb != null)
+        if ((other.CompareTag("Player") || other.CompareTag("Enemy") || other.CompareTag("Attachable")) && targetRb != null)
         {
             if (!isGravityFlipped) // ‚·‚Å‚É”­“®Ï‚İ‚È‚çˆ—‚µ‚È‚¢
             {
