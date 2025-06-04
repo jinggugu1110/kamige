@@ -151,7 +151,7 @@ public class TemporaryPlayerController : MonoBehaviour
             onGround = true;
             isJumping = false;
         }
-        else if (collision.gameObject.CompareTag("Spikes"))
+        else if (collision.gameObject.CompareTag("Spikes")|| collision.gameObject.CompareTag("Enemy"))
         {
             Respawn();
         }
