@@ -57,11 +57,14 @@ public class PlayerController : MonoBehaviour
         CheckCollisions();
         HandleMovement();
         HandleJump();
-
-        //if (transform.position.y < -10f || transform.position.x < -10f || transform.position.x > 10f)
-        //{
-        //    Respawn();
-        //}
+        if (onGround == false)
+        {
+            pl_moveSpeed = 3.5f;
+        }
+        else
+        {
+              pl_moveSpeed = 5f;
+        }
     }
 
     private void HandleMovement()
