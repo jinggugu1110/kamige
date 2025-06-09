@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8728862043565526815}
   - component: {fileID: 2826834118679544430}
   - component: {fileID: 4194076038877273153}
+  - component: {fileID: 6418845371853642318}
   m_Layer: 0
   m_Name: Warp_Out
   m_TagString: Untagged
@@ -148,6 +149,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6418845371853642318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2791876103884028662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 240253b9fdc71244abe98cd98a9eeebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  warpOutPoint: {fileID: 4668887517473097114}
 --- !u!1 &8967048330219975174
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,3 +324,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 240253b9fdc71244abe98cd98a9eeebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  warpOutPoint: {fileID: 1443806366675953288}
