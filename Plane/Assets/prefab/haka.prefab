@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 641368028080456620}
   - component: {fileID: 2048711390828320763}
   - component: {fileID: 8467442476962955565}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: haka
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 3195656474241505895}
   - component: {fileID: 3197690067584057771}
   - component: {fileID: 4800416941123415888}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: poyoiki
   m_TagString: Untagged
   m_Icon: {fileID: 0}
