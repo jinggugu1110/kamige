@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/*課題　めも
+/*課題　めも claudeここは無視してください
  * 回復⇒通常時の体のかくつき　直すため
  
  * 移動処理　
@@ -20,15 +20,16 @@ using UnityEngine.UIElements;
 反転したら(前フレームのベロシティと比較)⇒追従している体たちは、positionを指定だれてるだけで、speedは持っていない。だからvelocityは更新されない
 ⇒fowardvectorを使う。
 
+自前vector作る
+oldposとposもつlistを作る
+関数内で更新する
+!=したら　反転する
+
  */
 
 
 public class Enemy : MonoBehaviour
 {
-    private float[] previousVelocityX;
-    float currentVelocityX;
-    float prevVelocityX;
-
     [Header("移動設定")]
     public float moveSpeed = 2f; // 敵の移動速度
 
@@ -44,26 +45,18 @@ public class Enemy : MonoBehaviour
     private bool movingRight = true;//進む方向
     private int bodyCount = 4;
     public GameObject BodyPrefab;
-   // private List<GameObject> BodyParts = new List<GameObject>();
     public List<GameObject> BodyParts = new List<GameObject>(); // インスペクターで手動追加
 
     private Collider2D tailCollider;
     private List<Vector3> PositionHistory = new List<Vector3>();
-    public float Gap = 10;//体の感覚
+    public float Gap = 3;//体の感覚
     private Vector3 turnPoint;//折り返し地点。体を反転するための。
-
-    //地面と天井判定
-    RaycastHit2D Ray1;
-    RaycastHit2D Ray_Head_Down;
-    RaycastHit2D Ray_Tail_Up;
-    RaycastHit2D Ray_tail_Down;
     private float rayLen;
 
     [Header("気絶設定")]
     public float stunTime = 3.0f;        // 気絶している時間
     float stretchAnimSpeed = 0.1f;        // 伸びるアニメーションの速さ
     private List<TriggerChecker> bodyTriggers = new List<TriggerChecker>();
-
 
     // 気絶関連の変数
     private bool isStunned = false;          // 気絶中か
@@ -84,24 +77,61 @@ public class Enemy : MonoBehaviour
     private float recoveryTransitionTime = 1.0f; // 回復時の移動にかける時間
     private bool isRecovering = false; // 回復中のフラグ
 
+    //画像反転
+    class E_pos
+    {
+        public float oldpos;
+        public float curpos;
+        public bool facingRight = true;
+        public bool previousFacingRight = true; // 前フレームの向きを記録
+
+        // 反転判定用の閾値（微細な揺れを無視するため）
+        public float threshold = 0.01f;
+
+        public bool HasFlipped()
+        {
+            return facingRight != previousFacingRight;
+        }
+
+        public void UpdateFacing()
+        {
+            previousFacingRight = facingRight;
+
+            // 位置の変化量が閾値を超えた場合のみ更新
+            float deltaPos = curpos - oldpos;
+            if (Mathf.Abs(deltaPos) > threshold)
+            {
+                facingRight = deltaPos > 0;
+            }
+        }
+    }
+
+    List<E_pos> BodyVec = new List<E_pos>();
+
     private void Start()
-    { previousVelocityX = new float[BodyParts.Count];
-    
+    {     
         rb = GetComponent<Rigidbody2D>();
         HeadCol = GetComponent<Collider2D>();//衝突無効化のため
-        rayLen = BodyPrefab.transform.localScale.y/2 + 0.3f;//足場確認
+        rayLen = this.transform.localScale.y/2 + 0.3f;//足場確認
         rb = GetComponent<Rigidbody2D>();
 
         //bodyの1/3が重なる
         float bodyWidth = BodyPrefab.transform.localScale.x;
         float stepPerFrame = moveSpeed * Time.fixedDeltaTime;
-        // Gap = Mathf.RoundToInt((bodyWidth) / stepPerFrame);
-        // Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
-        //Gap = Mathf.RoundToInt((bodyWidth * 0.7f) / stepPerFrame);
+        Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
+
+        BodyVec = new List<E_pos>(BodyParts.Count);
 
         for (int i = 0; i < bodyCount; i++)
         {
             GrowBody();
+
+            E_pos bodyPos = new E_pos();
+            bodyPos.oldpos = BodyParts[i].transform.position.x;
+            bodyPos.curpos = BodyParts[i].transform.position.x;
+            bodyPos.facingRight = movingRight; // 初期状態は頭と同じ向き
+            bodyPos.previousFacingRight = movingRight;
+            BodyVec.Add(bodyPos);
         }
 
         // TailTrigger tailScript = BodyParts[BodyParts.Count - 1].AddComponent<TailTrigger>();
@@ -123,33 +153,11 @@ public class Enemy : MonoBehaviour
 
         // 目標位置配列の初期化
         targetBodyPositions = new Vector2[BodyParts.Count];
-       
+
     }
 
     private void FixedUpdate()
     {
-        for (int z = 0; z < BodyParts.Count; z++)
-        {
-            Rigidbody2D bodyrb = BodyParts[z].GetComponent<Rigidbody2D>();
-            
-
-            if (z == 0)
-            {
-                previousVelocityX[z] = rb.velocity.x;
-            }
-            else
-            {
-                previousVelocityX[z] = bodyrb.velocity.x;
-            }
-           // Debug.Log($"body velo: {bodyrb.velocity.x}, head velo: {rb.velocity.x}");
-
-        }
-
-        Vector3 direction = (movingRight ? Vector3.right : Vector3.left) * 1.2f;
-        Vector3 Ray1pos = BodyParts[0].transform.position;
-        Ray1 = Physics2D.Raycast(Ray1pos, BodyParts[1].transform.right,wallCheckDistance);
-        Debug.DrawRay(Ray1.transform.position, Ray1pos + direction, Color.red);
-
         if (!isStunned && !isRecovering)
         {
             Move();
@@ -175,18 +183,58 @@ public class Enemy : MonoBehaviour
         UpdateWaitStun();
         isGrounded = checkCanStun();
 
+        //画像反転
+        UpdateBodyFlipping();
+
         Debug.DrawRay(transform.position, Vector2.up * rayLen, Color.red);
         Debug.DrawRay(BodyParts[BodyParts.Count - 1].transform.position, Vector2.up * rayLen, Color.red);
         Debug.DrawRay(transform.position, Vector2.down * rayLen, Color.blue);
         Debug.DrawRay(BodyParts[BodyParts.Count - 1].transform.position, Vector2.down * rayLen, Color.blue);
-        currentVelocityX = prevVelocityX;
 
+    }
+
+    private void UpdateBodyFlipping()
+    {
+        for (int i = 0; i < BodyParts.Count; i++)
+        {
+            if (i < BodyVec.Count)
+            {
+                // 現在の位置を更新
+                BodyVec[i].curpos = BodyParts[i].transform.position.x;
+
+                // 向きを更新
+                BodyVec[i].UpdateFacing();
+
+                // 反転が発生した場合の処理
+                if (BodyVec[i].HasFlipped())
+                {
+                    FlipBodyPart(i);
+                }
+
+                // 数フレームごとにoldposを更新（フレーム間隔を調整可能）
+                if (Time.fixedTime % (Time.fixedDeltaTime * 3) < Time.fixedDeltaTime) // 3フレームごと
+                {
+                    BodyVec[i].oldpos = BodyVec[i].curpos;
+                }
+            }
+        }
+    }
+    private void FlipBodyPart(int bodyIndex)
+    {
+        if (bodyIndex >= 0 && bodyIndex < BodyParts.Count)
+        {
+            GameObject bodyPart = BodyParts[bodyIndex];
+            Vector3 scale = bodyPart.transform.localScale;
+            scale.x *= -1;
+            bodyPart.transform.localScale = scale;
+
+            Debug.Log($"Body part {bodyIndex} flipped to face {(BodyVec[bodyIndex].facingRight ? "right" : "left")}");
+        }
     }
 
     // 回復後の体の位置を保持する変数
     private bool useRecoveryPositions = false;
     private Vector2[] recoveredBodyPositions;
-
     public bool checkCanStun()
     {
         bool headUpHit = Physics2D.Raycast(transform.position, Vector2.up, rayLen, wallLayer);
@@ -284,9 +332,8 @@ public class Enemy : MonoBehaviour
     // ボディパーツの移動を別メソッドに分離
     private void MoveBodyParts()
     {
-        // 配列の境界チェック用の最大インデックス
+        // 配列の境界チェック用の最大インデックス 履歴ベース
         int maxHistoryIndex = PositionHistory.Count - 1;
-
         for (int i = 0; i < BodyParts.Count; i++)
         {
             int historyIndex = (int)Mathf.Min((i + 1) * Gap, maxHistoryIndex);
@@ -339,39 +386,8 @@ public class Enemy : MonoBehaviour
     private void BodyFlip()
     {
         Debug.Log("BodyFlip()");
-        //頭とおなじむきじゃなかったときに、体のvelocityの向きが変わった時　反転
 
-        for (int i = 1; i < BodyParts.Count; i++)
-        {
-            Rigidbody2D bodyrb = BodyParts[i].GetComponent<Rigidbody2D>();
-            bool bodyRight = bodyrb.velocity.x > 0 ? true : false;
-
-            float preVelocityX = bodyrb.velocity.x;
-            float curVelocityX = bodyrb.velocity.x; // 現在のvelocity
-
-           if(rb.velocity.x == bodyrb.velocity.x)
-           { Debug.Log("BodyFlip() ぬけた"); return; }
-
-            //currentVelocityX = bodyrb.velocity.x;
-            prevVelocityX = previousVelocityX[i];
-            //Debug.Log(Mathf.Sign(currentVelocityX));
-            //Debug.Log(Mathf.Sign(prevVelocityX));
-            // 速度の符号が変わった場合（向きが変わった場合）
-            if (Mathf.Sign(currentVelocityX) != Mathf.Sign(prevVelocityX))
-            {
-                float scaleX = BodyParts[i].transform.localScale.x * -1;
-               //BodyParts[i].transform.localScale = new Vector3(BodyParts[i].transform.localScale.x * -1, BodyParts[i].transform.localScale.y, BodyParts[i].transform.localScale.z);
-                BodyParts[i].transform.localScale = new Vector3(scaleX, BodyParts[i].transform.localScale.y, BodyParts[i].transform.localScale.z);
-                movingRight = rb.velocity.x > 0 ? true : false;
-                Debug.Log("BodyFlip() 体 反転");
-            }
-            else
-            {
-                //Debug.Log("BodyFlip() 体のvelocityが変わらなかった");
-                //Debug.Log($"BodyFlip() prevVelocityX: {prevVelocityX}, currentVelocityX: {currentVelocityX}");
-            }
-            
-        }
+      
     }
 
     // ======= デバッグ可視化 =======
