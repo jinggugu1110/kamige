@@ -7,26 +7,28 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/*
- 移動処理は鎖で引っ張ってるイメージです
-
- */
-
 /*課題　めも
- * 体をリストで追加できるようにする
- * 体の左右反転処理いれる
- * 重力フセンの影響をウケてるときに、そのフセンがしっぽに当たると気絶してしまう
- ⇒前はTailTriggerで気絶処理を読んでたが、影響をウケている最中なのか判定できないため、
-あらたにPostItTriggerクラスを作って気絶処理を読んでみたが失敗。惜しい？かも。
+ * 回復⇒通常時の体のかくつき　直すため
+ 
+ * 移動処理　
+ * フレームじゃなくて、各体に「前の体からどれくらい離すか」の変数？を持たせて、毎フレーム更新する。
 
-次試すこと
-istakeGravity bool変数を各体につけて、フセンからtrueにする。⇒TailTrigger内でrootでistakeGravityがtrueか探索して trueなら無効にする？
+体はキネマティックなのでそもそもrb.velocityは使えない！！
+
+いままでしっぱい
+スピードで条件付けて反転
+反転したら(前フレームのベロシティと比較)⇒追従している体たちは、positionを指定だれてるだけで、speedは持っていない。だからvelocityは更新されない
+⇒fowardvectorを使う。
 
  */
 
 
 public class Enemy : MonoBehaviour
 {
+    private float[] previousVelocityX;
+    float currentVelocityX;
+    float prevVelocityX;
+
     [Header("移動設定")]
     public float moveSpeed = 2f; // 敵の移動速度
 
@@ -47,7 +49,15 @@ public class Enemy : MonoBehaviour
 
     private Collider2D tailCollider;
     private List<Vector3> PositionHistory = new List<Vector3>();
-    private float Gap;//体の感覚
+    public float Gap = 10;//体の感覚
+    private Vector3 turnPoint;//折り返し地点。体を反転するための。
+
+    //地面と天井判定
+    RaycastHit2D Ray1;
+    RaycastHit2D Ray_Head_Down;
+    RaycastHit2D Ray_Tail_Up;
+    RaycastHit2D Ray_tail_Down;
+    private float rayLen;
 
     [Header("気絶設定")]
     public float stunTime = 3.0f;        // 気絶している時間
@@ -63,20 +73,30 @@ public class Enemy : MonoBehaviour
     private bool facingRight => movingRight; // 右向きかどうか（気絶アニメーション用）
     bool isUnconscious = false;
 
+    //折り返しで気絶しないための。
+    public bool waitStun = false;//折り返しで意図せず再度気絶しないために数秒待つ
+    public bool isGrounded = true;//空中にいないtrue/空中にいるfalse
+    public float waitStunDuration = 2.0f;
+    private float Timer_waitStun = 0f;
+
     // 気絶から回復時の体のスムーズな移動のための変数
     private Vector2[] targetBodyPositions; // 目標となる体の位置
     private float recoveryTransitionTime = 1.0f; // 回復時の移動にかける時間
     private bool isRecovering = false; // 回復中のフラグ
 
     private void Start()
-    {
+    { previousVelocityX = new float[BodyParts.Count];
+    
         rb = GetComponent<Rigidbody2D>();
         HeadCol = GetComponent<Collider2D>();//衝突無効化のため
+        rayLen = BodyPrefab.transform.localScale.y/2 + 0.3f;//足場確認
+        rb = GetComponent<Rigidbody2D>();
 
         //bodyの1/3が重なる
         float bodyWidth = BodyPrefab.transform.localScale.x;
         float stepPerFrame = moveSpeed * Time.fixedDeltaTime;
-         Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
+        // Gap = Mathf.RoundToInt((bodyWidth) / stepPerFrame);
+        // Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
         //Gap = Mathf.RoundToInt((bodyWidth * 0.7f) / stepPerFrame);
 
         for (int i = 0; i < bodyCount; i++)
@@ -84,8 +104,8 @@ public class Enemy : MonoBehaviour
             GrowBody();
         }
 
-        TailTrigger tailScript = BodyParts[BodyParts.Count - 1].AddComponent<TailTrigger>();
-        tailScript.enemy = this;
+        // TailTrigger tailScript = BodyParts[BodyParts.Count - 1].AddComponent<TailTrigger>();
+        //tailScript.enemy = this;
 
         // すべての体パーツのスプライトレンダラーを取得
         bodyRenderers = new SpriteRenderer[BodyParts.Count + 1]; // 頭 + 体パーツ
@@ -103,14 +123,39 @@ public class Enemy : MonoBehaviour
 
         // 目標位置配列の初期化
         targetBodyPositions = new Vector2[BodyParts.Count];
+       
     }
 
     private void FixedUpdate()
     {
+        for (int z = 0; z < BodyParts.Count; z++)
+        {
+            Rigidbody2D bodyrb = BodyParts[z].GetComponent<Rigidbody2D>();
+            
+
+            if (z == 0)
+            {
+                previousVelocityX[z] = rb.velocity.x;
+            }
+            else
+            {
+                previousVelocityX[z] = bodyrb.velocity.x;
+            }
+           // Debug.Log($"body velo: {bodyrb.velocity.x}, head velo: {rb.velocity.x}");
+
+        }
+
+        Vector3 direction = (movingRight ? Vector3.right : Vector3.left) * 1.2f;
+        Vector3 Ray1pos = BodyParts[0].transform.position;
+        Ray1 = Physics2D.Raycast(Ray1pos, BodyParts[1].transform.right,wallCheckDistance);
+        Debug.DrawRay(Ray1.transform.position, Ray1pos + direction, Color.red);
+
         if (!isStunned && !isRecovering)
         {
             Move();
-            CheckWall();
+            if (CheckWall()) {
+                StartWaitStun();
+            }
         }
         else if (isRecovering)
         {
@@ -125,11 +170,57 @@ public class Enemy : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
         }
+
+        //折り返したとき少し待ってからwaitStunをfalseにする
+        UpdateWaitStun();
+        isGrounded = checkCanStun();
+
+        Debug.DrawRay(transform.position, Vector2.up * rayLen, Color.red);
+        Debug.DrawRay(BodyParts[BodyParts.Count - 1].transform.position, Vector2.up * rayLen, Color.red);
+        Debug.DrawRay(transform.position, Vector2.down * rayLen, Color.blue);
+        Debug.DrawRay(BodyParts[BodyParts.Count - 1].transform.position, Vector2.down * rayLen, Color.blue);
+        currentVelocityX = prevVelocityX;
+
     }
 
     // 回復後の体の位置を保持する変数
     private bool useRecoveryPositions = false;
     private Vector2[] recoveredBodyPositions;
+
+    public bool checkCanStun()
+    {
+        bool headUpHit = Physics2D.Raycast(transform.position, Vector2.up, rayLen, wallLayer);
+        bool tailUpHit = Physics2D.Raycast(BodyParts[BodyParts.Count - 1].transform.position, Vector2.up, rayLen, wallLayer);
+        bool headDownHit = Physics2D.Raycast(transform.position, Vector2.down, rayLen, wallLayer);
+        bool tailDownHit = Physics2D.Raycast(BodyParts[BodyParts.Count - 1].transform.position, Vector2.down, rayLen, wallLayer);
+
+        if (headUpHit && tailUpHit || headDownHit && tailDownHit)
+        {
+            return true;
+        }
+        else
+        {
+            return false;//空中
+        }
+    }
+
+    private void StartWaitStun()
+    {
+        waitStun = true;
+        Timer_waitStun = waitStunDuration;
+    }
+
+    private void UpdateWaitStun()
+    {
+        if (waitStun)
+        {
+            Timer_waitStun -= Time.fixedDeltaTime;
+            if (Timer_waitStun <= 0f)
+            {
+                waitStun = false;
+            }
+        }
+    }
 
     private void Move()
     {
@@ -199,7 +290,7 @@ public class Enemy : MonoBehaviour
         for (int i = 0; i < BodyParts.Count; i++)
         {
             int historyIndex = (int)Mathf.Min((i + 1) * Gap, maxHistoryIndex);
-            Vector3 targetPosition = PositionHistory[historyIndex];
+            Vector3 targetPosition = PositionHistory[historyIndex - (i + 1)];
 
             // スムーズな移動を実装
             float smoothFactor = 15f; //スムーズさ係数
@@ -209,27 +300,6 @@ public class Enemy : MonoBehaviour
                 Time.deltaTime * smoothFactor
             );
         }
-
-        //float maxDistance = 0.6f; // セグメント間の最大距離
-        //float minDistance = 0.1f; // セグメント間の最小距離
-        //Vector3 prevPos = transform.position; // 頭の位置
-
-        //for (int i = 0; i < BodyParts.Count; i++)
-        //{
-        //    Vector3 curPos = BodyParts[i].transform.position;
-        //    Vector3 delta = curPos - prevPos;
-        //    float dist = delta.magnitude;
-
-        //    if (dist > maxDistance || dist < minDistance)
-        //    {
-        //        float clampedDist = Mathf.Clamp(dist, minDistance, maxDistance);
-        //        Vector3 dir = delta.normalized;
-        //        Vector3 targetPos = prevPos + dir * clampedDist;
-        //        BodyParts[i].transform.position = Vector3.Lerp(curPos, targetPos, 0.5f); // 少しだけ引っ張る感じ
-        //    }
-
-        //    prevPos = BodyParts[i].transform.position;
-        //}
     }
 
     // ======= 壁検知 =======
@@ -237,22 +307,71 @@ public class Enemy : MonoBehaviour
     {
         Vector2 direction = movingRight ? Vector2.right : Vector2.left;
         RaycastHit2D hit = Physics2D.Raycast(wallCheckPoint.position, direction, wallCheckDistance, wallLayer);
+        if (hit.collider) { turnPoint = this.transform.position; } else { turnPoint = Vector3.zero; }
         return hit.collider != null;
     }
 
-    private void CheckWall()
+    private bool CheckWall()
     {
         if (IsTouchingWall())
         {
             Flip();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
     // ======= 向き反転 =======
     private void Flip()
     {
+        Debug.Log("Flip()");
+
         movingRight = !movingRight;
-        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        transform.localScale = new Vector3(transform.localScale.x　* -1, transform.localScale.y, transform.localScale.z);      
+       // movingRight = rb.velocity.x > 0 ? true : false;
+
+        BodyFlip();
+    }
+
+    private void BodyFlip()
+    {
+        Debug.Log("BodyFlip()");
+        //頭とおなじむきじゃなかったときに、体のvelocityの向きが変わった時　反転
+
+        for (int i = 1; i < BodyParts.Count; i++)
+        {
+            Rigidbody2D bodyrb = BodyParts[i].GetComponent<Rigidbody2D>();
+            bool bodyRight = bodyrb.velocity.x > 0 ? true : false;
+
+            float preVelocityX = bodyrb.velocity.x;
+            float curVelocityX = bodyrb.velocity.x; // 現在のvelocity
+
+           if(rb.velocity.x == bodyrb.velocity.x)
+           { Debug.Log("BodyFlip() ぬけた"); return; }
+
+            //currentVelocityX = bodyrb.velocity.x;
+            prevVelocityX = previousVelocityX[i];
+            //Debug.Log(Mathf.Sign(currentVelocityX));
+            //Debug.Log(Mathf.Sign(prevVelocityX));
+            // 速度の符号が変わった場合（向きが変わった場合）
+            if (Mathf.Sign(currentVelocityX) != Mathf.Sign(prevVelocityX))
+            {
+                float scaleX = BodyParts[i].transform.localScale.x * -1;
+               //BodyParts[i].transform.localScale = new Vector3(BodyParts[i].transform.localScale.x * -1, BodyParts[i].transform.localScale.y, BodyParts[i].transform.localScale.z);
+                BodyParts[i].transform.localScale = new Vector3(scaleX, BodyParts[i].transform.localScale.y, BodyParts[i].transform.localScale.z);
+                movingRight = rb.velocity.x > 0 ? true : false;
+                Debug.Log("BodyFlip() 体 反転");
+            }
+            else
+            {
+                //Debug.Log("BodyFlip() 体のvelocityが変わらなかった");
+                //Debug.Log($"BodyFlip() prevVelocityX: {prevVelocityX}, currentVelocityX: {currentVelocityX}");
+            }
+            
+        }
     }
 
     // ======= デバッグ可視化 =======
@@ -268,18 +387,6 @@ public class Enemy : MonoBehaviour
     // ======= 体を生成 =======
     private void GrowBody()
     {
-        //GameObject body = Instantiate(BodyPrefab);
-        //BodyParts.Add(body);//リストに追加
-
-        //// 衝突を無効化（自分の頭とのみ）
-        //Collider2D bodyCol = body.GetComponent<Collider2D>();
-        //if (HeadCol != null && bodyCol != null)
-        //{
-        //    // bodyCol.isTrigger = (BodyParts.Count == bodyCount);//()条件文で,最後尻だけtrueにする
-        //    Physics2D.IgnoreCollision(HeadCol, bodyCol);
-        //}
-
-
         foreach (GameObject bodyPart in BodyParts)
         {
             if (bodyPart == null) continue;
@@ -294,17 +401,16 @@ public class Enemy : MonoBehaviour
 
     // ======= 気絶処理 =======
     public void OnTailHit()
-    {
-        Debug.Log("Enemy気絶処理");
-
+    {    
         if (isStunned) return;
-
+       
         StartStun(BodyParts.Count - 1);
     }
 
     // 気絶処理
     private void StartStun(int hitPartIndex)
     {
+        Debug.Log("Enemy気絶処理");
         isStunned = true;
         isStretchingBody = true;
 
@@ -345,7 +451,7 @@ public class Enemy : MonoBehaviour
 
             // 頭伸ばす
             Vector2 stretchDirection = facingRight ? Vector2.right : Vector2.left;
-            float headStretchLength = 0.3f * (hitPartIndex + 1);
+            float headStretchLength = 0.1f * (hitPartIndex + 1);
             Vector2 headTargetPosition = headOriginalPosition + stretchDirection * headStretchLength * t;
             transform.position = headTargetPosition;
 
@@ -354,7 +460,7 @@ public class Enemy : MonoBehaviour
             {
                 // 伸ばす方向（頭の向きに合わせる）
                 // 頭からの距離に応じて伸ばす長さを調整
-                float stretchLength = 0.25f * (hitPartIndex - i + 1);
+                float stretchLength = 0.1f * (hitPartIndex - i + 1);
                 Vector2 targetPosition = originalPositions[i] + stretchDirection * stretchLength * t;
                 BodyParts[i].transform.position = targetPosition;
             }
