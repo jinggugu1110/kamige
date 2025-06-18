@@ -3,7 +3,8 @@ using UnityEngine;
 public class poyoController : MonoBehaviour
 {
     public float moveSpeed = 2f;
-    public float detectionRange = 10f;
+    public float escapeRange = 5f; // PostItから逃げる距離
+    public float followRange = 10f; // プレイヤー追跡距離
     public Transform player;
 
     private Rigidbody2D rb;
@@ -12,7 +13,6 @@ public class poyoController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        //プレイヤー参照を取得設定されていなければプレイヤータグをもったオブジェクトを自動取得
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("nonconflictPostIt");
@@ -22,32 +22,51 @@ public class poyoController : MonoBehaviour
             }
             else
             {
-                //プレイヤーが見つからない場合のコメント
-                Debug.LogWarning("Player not found. Tag 'Player' must be set.");
+                Debug.LogWarning("Player not found. Make sure to tag the player as 'Player'.");
             }
         }
 
-        // 回転を固定しておく
         if (rb != null)
         {
             rb.freezeRotation = true;
+            rb.gravityScale = 0f;
         }
 
-        // Layer制御 "Enemy" は Layer 10、"Ground" は Layer 7）
-        Physics2D.IgnoreLayerCollision(10, 2); //"Enemy" と "Ground" の衝突を無視
+        // 例：Enemy (Layer 10) と Ground (Layer 2) の衝突を無視
+        Physics2D.IgnoreLayerCollision(10, 2);
     }
 
     void Update()
     {
-        //プレイヤーがいるときに座標取得して追いかける処理
-        if (player == null) return;
+        //PostItをチェックして逃げる方向を優先
+        GameObject[] postIts = GameObject.FindGameObjectsWithTag("PostIt");
+        Vector2 escapeDirection = Vector2.zero;
 
-        float distance = Vector2.Distance(transform.position, player.position);
-        if (distance <= detectionRange)
+        foreach (GameObject postIt in postIts)
         {
-            Vector2 direction = (player.position - transform.position).normalized;
-            transform.position += (Vector3)(direction * moveSpeed * Time.deltaTime);
+            float distance = Vector2.Distance(transform.position, postIt.transform.position);
+            if (distance <= escapeRange)
+            {
+                escapeDirection += (Vector2)(transform.position - postIt.transform.position).normalized;
+            }
+        }
+
+        if (escapeDirection != Vector2.zero)
+        {
+            //PostItから逃げる処理
+            transform.position += (Vector3)(escapeDirection.normalized * moveSpeed * Time.deltaTime);
+            return; //逃げる時はプレイヤーを追跡しない
+        }
+
+        //通常時プレイヤーを追いかける処理
+        if (player != null)
+        {
+            float playerDistance = Vector2.Distance(transform.position, player.position);
+            if (playerDistance <= followRange)
+            {
+                Vector2 direction = (player.position - transform.position).normalized;
+                transform.position += (Vector3)(direction * moveSpeed * Time.deltaTime);
+            }
         }
     }
 }
-
