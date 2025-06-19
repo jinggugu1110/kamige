@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -168,8 +169,12 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Respawn()
-    {
-        transform.position = initialPosition;
+    {        
+        //transform.position = initialPosition;
+
+        Debug.Log("Respawn()");
         rb.velocity = Vector2.zero;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        Fade.FadeToScene(currentSceneName);
     }
 }

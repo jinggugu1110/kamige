@@ -7,19 +7,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/*課題　めも claudeここは無視してください
- * 回復⇒通常時の体のかくつき　直すため
- 
+/*課題 
  * 移動処理　
  * フレームじゃなくて、各体に「前の体からどれくらい離すか」の変数？を持たせて、毎フレーム更新する。
 
 体はキネマティックなのでそもそもrb.velocityは使えない！！
 
-いままでしっぱい
-スピードで条件付けて反転
-反転したら(前フレームのベロシティと比較)⇒追従している体たちは、positionを指定だれてるだけで、speedは持っていない。だからvelocityは更新されない
-⇒fowardvectorを使う。
-
+ * 反転処理めも
 自前vector作る
 oldposとposもつlistを作る
 関数内で更新する
@@ -27,57 +21,48 @@ oldposとposもつlistを作る
 
  */
 
-
 public class Enemy : MonoBehaviour
 {
-    [Header("移動設定")]
-    public float moveSpeed = 2f; // 敵の移動速度
 
     [Header("壁検知設定")]
-    public Transform wallCheckPoint;         // Rayの発射位置（敵の前方に配置）
-    public float wallCheckDistance = 0.6f;   // Rayの距離
-    public LayerMask wallLayer;              // 壁レイヤー
+    public Transform wallCheckPoint;         // 敵に頭につけること。
+    public float wallCheckDistance = 0.6f;
+    public LayerMask wallLayer;
 
-    //敵の体
+    [Header("敵１の体")]
+    public float moveSpeed = 2f;
+    public List<GameObject> BodyParts = new List<GameObject>();
+
     private Rigidbody2D rb;
-    private Collider2D HeadCol;//当たり判定を避けさせるため、頭と体を分ける
+    private Collider2D HeadCol;//当たり判定を避けさせるため 頭専用
+    private bool movingRight = true;
 
-    private bool movingRight = true;//進む方向
-    private int bodyCount = 4;
-    public GameObject BodyPrefab;
-    public List<GameObject> BodyParts = new List<GameObject>(); // インスペクターで手動追加
-
-    private Collider2D tailCollider;
     private List<Vector3> PositionHistory = new List<Vector3>();
-    public float Gap = 3;//体の感覚
-    private Vector3 turnPoint;//折り返し地点。体を反転するための。
-    private float rayLen;
+    private float Gap;      //体の幅
+    private float rayLen;   //天井と地面判定のレイの長さ
 
     [Header("気絶設定")]
-    public float stunTime = 3.0f;        // 気絶している時間
-    float stretchAnimSpeed = 0.1f;        // 伸びるアニメーションの速さ
-    private List<TriggerChecker> bodyTriggers = new List<TriggerChecker>();
+    public float stunTime = 3.0f;        // 気絶時間
+    float stretchAnimSpeed = 0.1f;       // 回復animの速さ
 
-    // 気絶関連の変数
     private bool isStunned = false;          // 気絶中か
     private bool isStretchingBody = false;   // 体を伸ばすアニメーション中か
     private SpriteRenderer[] bodyRenderers;
     private Coroutine stunCoroutine;
-    private bool facingRight => movingRight; // 右向きかどうか（気絶アニメーション用）
-    bool isUnconscious = false;
 
     //折り返しで気絶しないための。
-    public bool waitStun = false;//折り返しで意図せず再度気絶しないために数秒待つ
-    public bool isGrounded = true;//空中にいないtrue/空中にいるfalse
-    public float waitStunDuration = 2.0f;
+    [HideInInspector] public bool waitStun = false;
+    [HideInInspector] public bool isGrounded = true;//空中にいないtrue/空中にいるfalse
+    private float waitStunDuration = 2.0f;
     private float Timer_waitStun = 0f;
 
-    // 気絶から回復時の体のスムーズな移動のための変数
-    private Vector2[] targetBodyPositions; // 目標となる体の位置
-    private float recoveryTransitionTime = 1.0f; // 回復時の移動にかける時間
-    private bool isRecovering = false; // 回復中のフラグ
+    //回復⇒通常
+    private Vector2[] targetBodyPositions;
+    private float recoveryTransitionTime = 1.0f;
+    [HideInInspector] public bool isRecovering = false; // 回復中
 
-    //画像反転
+
+    //画像反転 vectorが使えないので、各体の方向をクラスで管理する
     class E_pos
     {
         public float oldpos;
@@ -109,51 +94,59 @@ public class Enemy : MonoBehaviour
     List<E_pos> BodyVec = new List<E_pos>();
 
     private void Start()
-    {     
+    {
+        wallLayer = LayerMask.GetMask("Ground", "Grass", "PlayerJump", "Ignore Raycast");
+
         rb = GetComponent<Rigidbody2D>();
         HeadCol = GetComponent<Collider2D>();//衝突無効化のため
         rayLen = this.transform.localScale.y/2 + 0.3f;//足場確認
         rb = GetComponent<Rigidbody2D>();
 
-        //bodyの1/3が重なる
-        float bodyWidth = BodyPrefab.transform.localScale.x;
+        float bodyWidth = this.transform.localScale.x;
         float stepPerFrame = moveSpeed * Time.fixedDeltaTime;
         Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
 
-        BodyVec = new List<E_pos>(BodyParts.Count);
+        BodyVec = new List<E_pos>();
 
-        for (int i = 0; i < bodyCount; i++)
+        if (BodyParts.Count > 0)
         {
-            GrowBody();
+            for (int i = 0; i < BodyParts.Count; i++)
+            {
+                if (BodyParts[i] != null)
+                {
+                    IgnoreBody();
 
-            E_pos bodyPos = new E_pos();
-            bodyPos.oldpos = BodyParts[i].transform.position.x;
-            bodyPos.curpos = BodyParts[i].transform.position.x;
-            bodyPos.facingRight = movingRight; // 初期状態は頭と同じ向き
-            bodyPos.previousFacingRight = movingRight;
-            BodyVec.Add(bodyPos);
+                    E_pos bodyPos = new E_pos();
+                    bodyPos.oldpos = BodyParts[i].transform.position.x;
+                    bodyPos.curpos = BodyParts[i].transform.position.x;
+                    bodyPos.facingRight = movingRight; //初期状態は頭と同じ向き
+                    bodyPos.previousFacingRight = movingRight;
+                    BodyVec.Add(bodyPos);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No BodyParts assigned in inspector!");
         }
 
-        // TailTrigger tailScript = BodyParts[BodyParts.Count - 1].AddComponent<TailTrigger>();
-        //tailScript.enemy = this;
-
-        // すべての体パーツのスプライトレンダラーを取得
         bodyRenderers = new SpriteRenderer[BodyParts.Count + 1]; // 頭 + 体パーツ
         bodyRenderers[0] = GetComponent<SpriteRenderer>(); //[0]は頭
         for (int i = 0; i < BodyParts.Count; i++)
         {
-            bodyRenderers[i + 1] = BodyParts[i].GetComponent<SpriteRenderer>();
+            if (BodyParts[i] != null)
+            {
+                bodyRenderers[i + 1] = BodyParts[i].GetComponent<SpriteRenderer>();
+            }
         }
 
         // 位置履歴の初期化
-        for (int i = 0; i < 100; i++) // historySize = 100と仮定
+        for (int i = 0; i < 100; i++)
         {
             PositionHistory.Add(transform.position);
         }
 
-        // 目標位置配列の初期化
         targetBodyPositions = new Vector2[BodyParts.Count];
-
     }
 
     private void FixedUpdate()
@@ -161,7 +154,10 @@ public class Enemy : MonoBehaviour
         if (!isStunned && !isRecovering)
         {
             Move();
-            if (CheckWall()) {
+
+            if (CheckWall())
+            {
+
                 StartWaitStun();
             }
         }
@@ -199,20 +195,16 @@ public class Enemy : MonoBehaviour
         {
             if (i < BodyVec.Count)
             {
-                // 現在の位置を更新
                 BodyVec[i].curpos = BodyParts[i].transform.position.x;
-
-                // 向きを更新
                 BodyVec[i].UpdateFacing();
 
-                // 反転が発生した場合の処理
                 if (BodyVec[i].HasFlipped())
                 {
                     FlipBodyPart(i);
                 }
 
-                // 数フレームごとにoldposを更新（フレーム間隔を調整可能）
-                if (Time.fixedTime % (Time.fixedDeltaTime * 3) < Time.fixedDeltaTime) // 3フレームごと
+                //3フレームごとにoldposを更新
+                if (Time.fixedTime % (Time.fixedDeltaTime * 3) < Time.fixedDeltaTime)
                 {
                     BodyVec[i].oldpos = BodyVec[i].curpos;
                 }
@@ -227,8 +219,6 @@ public class Enemy : MonoBehaviour
             Vector3 scale = bodyPart.transform.localScale;
             scale.x *= -1;
             bodyPart.transform.localScale = scale;
-
-            Debug.Log($"Body part {bodyIndex} flipped to face {(BodyVec[bodyIndex].facingRight ? "right" : "left")}");
         }
     }
 
@@ -248,7 +238,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            return false;//空中
+            return false;
         }
     }
 
@@ -272,18 +262,18 @@ public class Enemy : MonoBehaviour
 
     private void Move()
     {
-        // 移動方向の設定
+        //向き
         float moveDir = movingRight ? 1f : -1f;
         rb.velocity = new Vector2(moveDir * moveSpeed, rb.velocity.y);
 
-        // 位置履歴の管理
+        //古いものを削除
         PositionHistory.Insert(0, transform.position);
-        if (PositionHistory.Count > 100) // 履歴の最大数を超えたら古いものを削除
+        if (PositionHistory.Count > 100) 
         {
             PositionHistory.RemoveAt(PositionHistory.Count - 1);
         }
 
-        // Bodyを動かす
+        //動かす
         if (!isStretchingBody)
         {
             // 回復直後は回復時の体の位置を使用
@@ -299,12 +289,10 @@ public class Enemy : MonoBehaviour
 
                 // 数フレーム後に通常の移動に戻す（急なリセットを防ぐ）
                 StartCoroutine(ResetRecoveryPositionsAfterDelay(10));
+                return;
             }
-            else
-            {
-                // 通常の体パーツ移動
                 MoveBodyParts();
-            }
+            
         }
     }
 
@@ -337,7 +325,11 @@ public class Enemy : MonoBehaviour
         for (int i = 0; i < BodyParts.Count; i++)
         {
             int historyIndex = (int)Mathf.Min((i + 1) * Gap, maxHistoryIndex);
-            Vector3 targetPosition = PositionHistory[historyIndex - (i + 1)];
+
+            int targetIndex = Mathf.Max(0, historyIndex - (i + 1));
+            targetIndex = Mathf.Min(targetIndex, maxHistoryIndex);
+            Vector3 targetPosition = PositionHistory[targetIndex];//ここが334行目
+
 
             // スムーズな移動を実装
             float smoothFactor = 15f; //スムーズさ係数
@@ -347,14 +339,17 @@ public class Enemy : MonoBehaviour
                 Time.deltaTime * smoothFactor
             );
         }
+
     }
 
     // ======= 壁検知 =======
     private bool IsTouchingWall()
     {
+        
         Vector2 direction = movingRight ? Vector2.right : Vector2.left;
         RaycastHit2D hit = Physics2D.Raycast(wallCheckPoint.position, direction, wallCheckDistance, wallLayer);
-        if (hit.collider) { turnPoint = this.transform.position; } else { turnPoint = Vector3.zero; }
+        //if (hit.collider) { turnPoint = this.transform.position; Debug.Log("敵１ IsTouchingWall() true"); } else { turnPoint = Vector3.zero; }// Debug.Log("敵１ IsTouchingWall() false"); }
+
         return hit.collider != null;
     }
 
@@ -380,14 +375,6 @@ public class Enemy : MonoBehaviour
         transform.localScale = new Vector3(transform.localScale.x　* -1, transform.localScale.y, transform.localScale.z);      
        // movingRight = rb.velocity.x > 0 ? true : false;
 
-        BodyFlip();
-    }
-
-    private void BodyFlip()
-    {
-        Debug.Log("BodyFlip()");
-
-      
     }
 
     // ======= デバッグ可視化 =======
@@ -401,7 +388,7 @@ public class Enemy : MonoBehaviour
     }
 
     // ======= 体を生成 =======
-    private void GrowBody()
+    private void IgnoreBody()
     {
         foreach (GameObject bodyPart in BodyParts)
         {
@@ -457,7 +444,6 @@ public class Enemy : MonoBehaviour
             {
                 Debug.Log("頭が壁に当たったのでストレッチ中断");
                 // アニメーションループを抜けて気絶状態にする
-                isUnconscious = true;
                 // 現在の位置でアニメーションを停止
                 break;
             }
@@ -466,7 +452,7 @@ public class Enemy : MonoBehaviour
             float t = stretchTime / stretchAnimSpeed;
 
             // 頭伸ばす
-            Vector2 stretchDirection = facingRight ? Vector2.right : Vector2.left;
+            Vector2 stretchDirection = movingRight ? Vector2.right : Vector2.left;
             float headStretchLength = 0.1f * (hitPartIndex + 1);
             Vector2 headTargetPosition = headOriginalPosition + stretchDirection * headStretchLength * t;
             transform.position = headTargetPosition;
@@ -596,7 +582,6 @@ public class Enemy : MonoBehaviour
         isStunned = false;
         isStretchingBody = false;
         isRecovering = false;
-        isUnconscious = false;
 
         // 通常の移動を再開（回復した体の位置を保持する）
         float moveDir = movingRight ? 1f : -1f;

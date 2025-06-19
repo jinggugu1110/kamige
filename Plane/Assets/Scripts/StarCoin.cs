@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class StarCoin : MonoBehaviour
 {
     public bool isGetcoin = false;//Player‚ªƒRƒCƒ“‚ÉG‚ê‚½‚çtrue
-    private bool playerisexist = false;
+    //private bool playerisexist = false;
 
     private void Start()
     {

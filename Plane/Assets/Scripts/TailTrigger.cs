@@ -21,26 +21,21 @@ public class TailTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("PostIt"))
+        if (other.CompareTag("PostIt")|| other.CompareTag("conflictPostIt") || other.CompareTag("nonconflictPostIt"))
         {
             Transform postItRoot = other.transform.root;
             if (postItRoot.CompareTag("Player"))
             {
                 return;
             }
-            else if (other.transform.root == this.transform.root)// 自分の親がEnemyと一致していれば無視（＝自分自身に当たった）
+            else if (other.transform.root == this.transform.root)
             {
                 return;
             }
-            else if (enemy != null && enemy.isGrounded && enemy.waitStun == false)//ここの条件がおかしいのか？
+            else if (enemy != null && enemy.isGrounded && enemy.waitStun == false && enemy.isRecovering == false)
             {
                 enemy.OnTailHit();
-            }
-
-            if (enemy.isGrounded == false)
-            {
-                Debug.Log("canStun == false");
-            }          
+            }      
 
         }
     }
