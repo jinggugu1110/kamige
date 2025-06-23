@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class poyoController : MonoBehaviour
 {
-    public float moveSpeed = 2f;
-    public float escapeRange = 5f; // PostItから逃げる距離
-    public float followRange = 10f; // プレイヤー追跡距離
+    public float moveSpeed = 2f;    //速度
+    public float escapeRange = 5f;  //PostItから逃げる距離
+    public float followRange = 10f; //プレイヤー追跡距離
     public Transform player;
 
     private Rigidbody2D rb;
@@ -13,6 +13,7 @@ public class poyoController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
+        //プレイヤーのTransformを取得
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("nonconflictPostIt");
@@ -20,12 +21,8 @@ public class poyoController : MonoBehaviour
             {
                 player = playerObj.transform;
             }
-            else
-            {
-                Debug.LogWarning("Player not found. Make sure to tag the player as 'Player'.");
-            }
         }
-
+        //ぽよんしーの初期設定
         if (rb != null)
         {
             rb.freezeRotation = true;
@@ -38,6 +35,18 @@ public class poyoController : MonoBehaviour
 
     void Update()
     {
+        //付箋を貼って剥がされたときに重力が適応されてぽよんしーが浮けなくなる問題の修正用
+        if (rb.gravityScale == 1.0f)
+        {
+            rb.gravityScale = 0.0f; // 重力を無効化
+        }
+
+        //ぽよんしーがレイヤーから出られないようにするための処理
+        //ぽよんしーだけが触れるレイヤーを設定
+        //ぽよんしー以外は触れないようにする
+        int poyolayer =LayerMask.NameToLayer("poyoArea");
+
+
         //PostItをチェックして逃げる方向を優先
         GameObject[] postIts = GameObject.FindGameObjectsWithTag("PostIt");
         Vector2 escapeDirection = Vector2.zero;
@@ -55,7 +64,7 @@ public class poyoController : MonoBehaviour
         {
             //PostItから逃げる処理
             transform.position += (Vector3)(escapeDirection.normalized * moveSpeed * Time.deltaTime);
-            return; //逃げる時はプレイヤーを追跡しない
+            return; //逃げる時はプレイヤーを優先的には追跡しない
         }
 
         //通常時プレイヤーを追いかける処理
@@ -70,3 +79,11 @@ public class poyoController : MonoBehaviour
         }
     }
 }
+
+
+
+//// int layerMask = 1 << LayerMask.NameToLayer("TargetLayer");
+//if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, layerMask))
+//{
+//    Debug.Log("Hit: " + hit.collider.name);
+//}

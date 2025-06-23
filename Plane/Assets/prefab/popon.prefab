@@ -172,5 +172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  detectionRange: 10
+  escapeRange: 2.5
+  followRange: 10
   player: {fileID: 0}

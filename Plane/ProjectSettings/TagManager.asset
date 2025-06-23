@@ -13,6 +13,7 @@ TagManager:
   - nonconflictPostIt
   - grass
   - Enemy
+  - Poyo
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - Grass
   - PlayerJump
   - Enemy
-  - 
+  - poyoArea
   - 
   - 
   - 
