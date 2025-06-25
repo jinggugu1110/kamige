@@ -6,6 +6,7 @@ public class poyoController : MonoBehaviour
     public float escapeRange = 5f;  //PostItから逃げる距離
     public float followRange = 10f; //プレイヤー追跡距離
     public Transform player;
+    public BoxCollider2D spawnArea; // 紫の出現制限エリア（Trigger）
 
     private Rigidbody2D rb;
 
@@ -13,7 +14,7 @@ public class poyoController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        //プレイヤーのTransformを取得
+        // プレイヤーのTransformを取得
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("nonconflictPostIt");
@@ -22,32 +23,33 @@ public class poyoController : MonoBehaviour
                 player = playerObj.transform;
             }
         }
-        //ぽよんしーの初期設定
+        // spawnAreaの初期設定
+        if (spawnArea == null)
+        {
+            GameObject areaObj = GameObject.Find("poyoiki"); //出現オブジェクト名
+            if (areaObj != null)
+            {
+                spawnArea = areaObj.GetComponent<BoxCollider2D>();
+            }
+        }
+
+
         if (rb != null)
         {
             rb.freezeRotation = true;
             rb.gravityScale = 0f;
         }
 
-        // 例：Enemy (Layer 10) と Ground (Layer 2) の衝突を無視
-        Physics2D.IgnoreLayerCollision(10, 2);
+        Physics2D.IgnoreLayerCollision(10, 2); //Enemy (10) と Ground (2)
     }
 
     void Update()
     {
-        //付箋を貼って剥がされたときに重力が適応されてぽよんしーが浮けなくなる問題の修正用
         if (rb.gravityScale == 1.0f)
         {
-            rb.gravityScale = 0.0f; // 重力を無効化
+            rb.gravityScale = 0.0f; // 常に無重力
         }
 
-        //ぽよんしーがレイヤーから出られないようにするための処理
-        //ぽよんしーだけが触れるレイヤーを設定
-        //ぽよんしー以外は触れないようにする
-        int poyolayer =LayerMask.NameToLayer("poyoArea");
-
-
-        //PostItをチェックして逃げる方向を優先
         GameObject[] postIts = GameObject.FindGameObjectsWithTag("PostIt");
         Vector2 escapeDirection = Vector2.zero;
 
@@ -62,13 +64,9 @@ public class poyoController : MonoBehaviour
 
         if (escapeDirection != Vector2.zero)
         {
-            //PostItから逃げる処理
             transform.position += (Vector3)(escapeDirection.normalized * moveSpeed * Time.deltaTime);
-            return; //逃げる時はプレイヤーを優先的には追跡しない
         }
-
-        //通常時プレイヤーを追いかける処理
-        if (player != null)
+        else if (player != null)
         {
             float playerDistance = Vector2.Distance(transform.position, player.position);
             if (playerDistance <= followRange)
@@ -77,13 +75,18 @@ public class poyoController : MonoBehaviour
                 transform.position += (Vector3)(direction * moveSpeed * Time.deltaTime);
             }
         }
+
+        // 範囲外に出られないよう制限
+        if (spawnArea != null)
+        {
+            transform.position = ClampToBounds(transform.position, spawnArea.bounds);
+        }
+    }
+
+    private Vector3 ClampToBounds(Vector3 position, Bounds bounds)
+    {
+        float x = Mathf.Clamp(position.x, bounds.min.x, bounds.max.x);
+        float y = Mathf.Clamp(position.y, bounds.min.y, bounds.max.y);
+        return new Vector3(x, y, position.z);
     }
 }
-
-
-
-//// int layerMask = 1 << LayerMask.NameToLayer("TargetLayer");
-//if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity, layerMask))
-//{
-//    Debug.Log("Hit: " + hit.collider.name);
-//}
