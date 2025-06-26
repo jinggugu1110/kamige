@@ -15,8 +15,8 @@ public class SwitchPlayerPostIt : MonoBehaviour
             // レイヤー切り替え
             targetObject.layer = LayerMask.NameToLayer("Default");
 
-            // ターゲットに TemporaryPlayerController があれば有効化
-            if (targetObject.TryGetComponent(out TemporaryPlayerController temp))
+            // ターゲットに PlayerController があれば有効化
+            if (targetObject.TryGetComponent(out PlayerController temp))
             {
                 temp.enabled = true;
             }
@@ -44,7 +44,7 @@ public class SwitchPlayerPostIt : MonoBehaviour
 
 
             // 一時プレイヤー操作を終了
-            if (targetObject.TryGetComponent(out TemporaryPlayerController temp))
+            if (targetObject.TryGetComponent(out PlayerController temp))
             {
                 temp.enabled = false;
             }
