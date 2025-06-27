@@ -43,6 +43,11 @@ public class poyoController : MonoBehaviour
         Physics2D.IgnoreLayerCollision(10, 2); //Enemy (10) ‚Æ Ground (2)
     }
 
+    public void SetSpawnArea(BoxCollider2D area)
+    {
+        spawnArea = area;
+    }
+
     void Update()
     {
         if (rb.gravityScale == 1.0f)
