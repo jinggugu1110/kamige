@@ -1,24 +1,43 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GravityFlipPostIt : MonoBehaviour
 {
     public float activationTime = 1.0f; // 発動までの時間
     private float touchTime = 0.0f;
-    private Rigidbody2D targetRb;
+
+    private Rigidbody2D targetRb;   // 貼る対象
+    private Rigidbody2D gravityRb;  // 実際に重力操作するRB
+    Enemy headEnemy = null;
+
     private bool isGravityFlipped = false;
     private float horizontalGravity = 9.8f; // X方向の重力
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Attachable")|| other.CompareTag("Enemy"))
+        if (other.CompareTag("Player") || other.CompareTag("Attachable") || other.CompareTag("Enemy"))
         {
-            if (targetRb == null)
+            if (other.CompareTag("Enemy"))
+            {
+                BodyPart enemyBody = other.GetComponent<BodyPart>();
+                headEnemy = enemyBody.head;
+                if (headEnemy.isStunned) {
+                    headEnemy = null;
+                    return;
+                }
+                targetRb = other.GetComponent<Rigidbody2D>();
+                gravityRb = headEnemy.GetComponent<Rigidbody2D>();
+            }
+            else
             {
                 targetRb = other.GetComponent<Rigidbody2D>();
-                if (targetRb != null)
-                {
-                    transform.SetParent(targetRb.transform);
-                }
+                gravityRb = targetRb;
+            }
+
+            if (targetRb != null)
+            {
+                transform.SetParent(targetRb.transform);
+                Debug.Log($"targetRbを{targetRb.gameObject.name}に設定しました");
             }
         }
     }
@@ -38,79 +57,88 @@ public class GravityFlipPostIt : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    public void OnTriggerExit2D(Collider2D other)
     {
-        if (other.GetComponent<Rigidbody2D>() == targetRb)
+        if (targetRb != null && other.transform.IsChildOf(targetRb.transform))
         {
-            ResetGravity();        
-            
+            ResetGravity();
+
             // 安全に親を外す
-            if (transform.parent != null && transform.parent.gameObject.activeInHierarchy)
+            if (transform.parent != null)
             {
                 transform.SetParent(null);
             }
-            
+
             targetRb = null;
+            gravityRb = null;
             touchTime = 0.0f;
+            Debug.Log("反転解除");
         }
+        else if (targetRb == null || !other.transform.IsChildOf(targetRb.transform))
+        {
+            Debug.Log("反転解除出来なかった！");
+        }
+      
     }
 
     private void ActivateGravityFlip()
     {
-        if (targetRb != null)
+        if (gravityRb != null && headEnemy.isStunned == false)
         {
             isGravityFlipped = true;
             UpdateGravityBasedOnRotation(transform.eulerAngles.z);
-            Debug.Log("重力反転付箋が発動！");
         }
     }
 
     private void ResetGravity()
     {
-        if (targetRb != null)
+        if (gravityRb != null)
         {
-            targetRb.gravityScale = 1.0f; // 重力を元に戻す
-            targetRb.velocity = Vector2.zero; // 速度をリセット
-            isGravityFlipped = false;
-            Debug.Log("重力反転解除");
+            gravityRb.gravityScale = 1.0f; // 重力を元に戻す
+            gravityRb.velocity = Vector2.zero; ; // 速度をリセット
         }
+
+        isGravityFlipped = false;
     }
 
     public void UpdateGravityBasedOnRotation(float rotationZ)
     {
-        if (targetRb == null) return;
+        if (gravityRb == null) return;
 
         if (rotationZ == 0)
         {
-            targetRb.gravityScale = -1.0f; // 上方向に重力
+            gravityRb.gravityScale = -1.0f; // 上方向に重力
         }
         else if (rotationZ == 90)
         {
-            targetRb.gravityScale = 0.0f; // 重力を無効化
+            gravityRb.gravityScale = 0.0f; // 重力を無効化
         }
         else if (rotationZ == 180)
         {
-            targetRb.gravityScale = 1.0f; // 下方向（通常の重力）
+            gravityRb.gravityScale = 1.0f; // 下方向（通常の重力）
         }
         else if (rotationZ == 270)
         {
-            targetRb.gravityScale = 0.0f; // 重力を無効化
+            gravityRb.gravityScale = 0.0f; // 重力を無効化
         }
+
     }
 
     private void FixedUpdate()
     {
-        if (targetRb == null) return;
+        if (gravityRb == null) return;
 
         float rotationZ = transform.eulerAngles.z;
 
         if (rotationZ == 90) // 左方向重力
         {
-            targetRb.AddForce(new Vector2(-horizontalGravity, 0), ForceMode2D.Force);
+            gravityRb.AddForce(new Vector2(-horizontalGravity, 0), ForceMode2D.Force);
         }
         else if (rotationZ == 270) // 右方向重力
         {
-            targetRb.AddForce(new Vector2(horizontalGravity, 0), ForceMode2D.Force);
+            gravityRb.AddForce(new Vector2(horizontalGravity, 0), ForceMode2D.Force);
         }
+
     }
+
 }

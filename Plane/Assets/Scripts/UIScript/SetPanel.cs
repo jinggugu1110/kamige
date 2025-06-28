@@ -17,14 +17,6 @@ public class SetPanel : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Toggle();
-            if (panel.activeSelf)
-            {
-                Debug.Log("パネル　表示");
-            }
-            else {
-                Debug.Log("パネル　ひ表示");
-
-            }
         }
     }
 

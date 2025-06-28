@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
     public List<GameObject> BodyParts = new List<GameObject>();
 
     private Rigidbody2D rb;
-    private Collider2D HeadCol;//当たり判定を避けさせるため 頭専用
+    [HideInInspector] public Collider2D HeadCol;//当たり判定を避けさせるため 頭専用
     private bool movingRight = true;
 
     private List<Vector3> PositionHistory = new List<Vector3>();
@@ -45,7 +45,8 @@ public class Enemy : MonoBehaviour
     public float stunTime = 3.0f;        // 気絶時間
     float stretchAnimSpeed = 0.1f;       // 回復animの速さ
 
-    private bool isStunned = false;          // 気絶中か
+    [HideInInspector] public bool isStunned = false;          // 気絶中か 他のコード内でも使う。
+    [HideInInspector] public bool isGravityFlipped = false;
     private bool isStretchingBody = false;   // 体を伸ばすアニメーション中か
     private SpriteRenderer[] bodyRenderers;
     private Coroutine stunCoroutine;
@@ -104,7 +105,8 @@ public class Enemy : MonoBehaviour
 
         float bodyWidth = this.transform.localScale.x;
         float stepPerFrame = moveSpeed * Time.fixedDeltaTime;
-        Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
+        //Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
+        Gap = Mathf.RoundToInt(bodyWidth/ stepPerFrame);
 
         BodyVec = new List<E_pos>();
 
@@ -231,6 +233,11 @@ public class Enemy : MonoBehaviour
         bool tailUpHit = Physics2D.Raycast(BodyParts[BodyParts.Count - 1].transform.position, Vector2.up, rayLen, wallLayer);
         bool headDownHit = Physics2D.Raycast(transform.position, Vector2.down, rayLen, wallLayer);
         bool tailDownHit = Physics2D.Raycast(BodyParts[BodyParts.Count - 1].transform.position, Vector2.down, rayLen, wallLayer);
+
+        if (GetComponentInChildren<GravityFlipPostIt>() != null)
+        {
+            return false;
+        }
 
         if (headUpHit && tailUpHit || headDownHit && tailDownHit)
         {
@@ -369,7 +376,6 @@ public class Enemy : MonoBehaviour
     // ======= 向き反転 =======
     private void Flip()
     {
-        Debug.Log("Flip()");
 
         movingRight = !movingRight;
         transform.localScale = new Vector3(transform.localScale.x　* -1, transform.localScale.y, transform.localScale.z);      
@@ -413,7 +419,6 @@ public class Enemy : MonoBehaviour
     // 気絶処理
     private void StartStun(int hitPartIndex)
     {
-        Debug.Log("Enemy気絶処理");
         isStunned = true;
         isStretchingBody = true;
 
