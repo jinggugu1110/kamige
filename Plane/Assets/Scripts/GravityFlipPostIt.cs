@@ -13,6 +13,8 @@ public class GravityFlipPostIt : MonoBehaviour
     private bool isGravityFlipped = false;
     private float horizontalGravity = 9.8f; // X方向の重力
 
+    public GameObject effectObject; // ExitEffectをInspectorで割り当て（シーン上の常駐オブジェクト）
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") || other.CompareTag("Attachable") || other.CompareTag("Enemy"))
@@ -61,6 +63,21 @@ public class GravityFlipPostIt : MonoBehaviour
     {
         if (targetRb != null && other.transform.IsChildOf(targetRb.transform))
         {
+            if (effectObject != null)
+            {
+                SpriteRenderer postitRenderer = GetComponent<SpriteRenderer>();
+                Vector3 center = postitRenderer.bounds.center;
+
+                effectObject.transform.position = this.transform.position; // 再生位置をPostItと同じに
+                effectObject.GetComponent<EffectAutoHider>().PlayEffect();
+
+                Debug.Log("あにｍ　再生");
+
+            }
+            else {
+                Debug.Log("あにｍ　再生のおおおおおおおおおおおおおおお");
+            }
+
             ResetGravity();
 
             // 安全に親を外す
@@ -80,6 +97,7 @@ public class GravityFlipPostIt : MonoBehaviour
         }
       
     }
+
 
     private void ActivateGravityFlip()
     {
