@@ -77,7 +77,8 @@ public class StageSelectButton : MonoBehaviour
             // 画面外に出たらシーン遷移
             if (transform.position.x > originalPosition.x + offScreenDistance)
             {
-                Fade.FadeToScene(Nextscene);
+                // Fade.FadeToScene(Nextscene);
+                SceneManager.LoadScene(Nextscene); // 指定したシーンに遷移
                 isSelected = false;
             }
         }

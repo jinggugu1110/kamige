@@ -323,14 +323,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 634414676}
         m_TargetAssemblyTypeName: ButtonSceneChanger, Assembly-CSharp
-        m_MethodName: GoToStageSelect
-        m_Mode: 1
+        m_MethodName: Fade_SetScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: 0_StageSelect
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &634414678
@@ -462,7 +462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &654292098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -885,7 +885,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3755935948108334050, guid: d544efa421e102543b67ded4745e24a0, type: 3}
       propertyPath: Nextscene
-      value: 1-2
+      value: Stage1-2
       objectReference: {fileID: 0}
     - target: {fileID: 3755935948108334050, guid: d544efa421e102543b67ded4745e24a0, type: 3}
       propertyPath: offScreenDistance
@@ -970,7 +970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3755935948108334050, guid: d544efa421e102543b67ded4745e24a0, type: 3}
       propertyPath: Nextscene
-      value: 1-2
+      value: Stage1-3
       objectReference: {fileID: 0}
     - target: {fileID: 3755935948108334050, guid: d544efa421e102543b67ded4745e24a0, type: 3}
       propertyPath: offScreenDistance
@@ -1059,7 +1059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3755935948108334050, guid: d544efa421e102543b67ded4745e24a0, type: 3}
       propertyPath: Nextscene
-      value: 1-2
+      value: Stage1-1
       objectReference: {fileID: 0}
     - target: {fileID: 3755935948108334050, guid: d544efa421e102543b67ded4745e24a0, type: 3}
       propertyPath: offScreenDistance

@@ -23,6 +23,7 @@ public class Goal : MonoBehaviour
                 targetRb = other.GetComponent<Rigidbody2D>();
                 //SceneManager.LoadScene("Result");
                 panel.SetActive(true);
+
             }
         }      
     }
