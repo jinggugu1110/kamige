@@ -1,99 +1,53 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* ワープするスクリプト
-   入り口のオブジェクトにアタッチしてください
-   出口は、入り口の子オブジェクトにしてください */
 public class Warp : MonoBehaviour
 {
-    Transform Warp_OutPoint;
-    private bool OutisinStage = false; //出口がステージ内にあればtrue
-    private float minX = -10f;
-    private float maxX = 10f;
+    public Transform warpOutPoint;
+    private HashSet<GameObject> warpedObjects = new HashSet<GameObject>();
+
+    private float minX = -1000f;
+    private float maxX = 1000f;
     private float minY = -10f;
-    private HashSet<GameObject> WarpedList = new HashSet<GameObject>(); //ワープ済みリスト。HashSetは「重複しない要素」を格納する。
-    private float warpCooldown = 0.5f; // ワープのクールダウン時間
 
-    private void Start()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Warp_OutPoint = transform.childCount > 0 ? transform.GetChild(0) : null;
-    }
+        Transform root = FindRootObject(other.transform);
+        GameObject obj = root.gameObject;
 
-    private void Update()
-    {
-        OutisinStage = !(Warp_OutPoint.position.x < minX || Warp_OutPoint.position.x > maxX || Warp_OutPoint.position.y < minY);
+        if (warpedObjects.Contains(obj)) return;
+        if (!IsWarpValid(root)) return;
 
-        // 定期的にWarpedListをクリアする
-        if (WarpedList.Count > 0)
+        if (warpOutPoint != null && IsInStage(warpOutPoint.position))
         {
-            StartCoroutine(ClearWarpedObject());
+            WarpToDestination(root);
         }
     }
 
-    private IEnumerator ClearWarpedObject()
+    private void OnTriggerExit2D(Collider2D other)
     {
-        yield return new WaitForSeconds(warpCooldown);
-        WarpedList.Clear();
-    }
+        Transform root = FindRootObject(other.transform);
+        GameObject obj = root.gameObject;
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        // 既にワープ処理をしたオブジェクトならスキップ
-        if (WarpedList.Contains(other.gameObject))
+        if (warpedObjects.Contains(obj))
         {
-            return;
-        }
-
-        if (other.CompareTag("Attachable")) //ただのオブジェクト
-        {
-            if (Warp_OutPoint != null && OutisinStage)
-            {
-                Transform root = FindRootObject(other.transform);//root = 最上位の親
-                WarpObject(root);
-            }
-            else
-            {
-                // プレイヤー死亡処理
-            }
-        }
-        else if (other.CompareTag("PostIt")|| other.CompareTag("Player")) //プレイヤーふせん
-        {
-　          Transform root = FindRootObject(other.transform);
-            if (root.CompareTag("Player")|| root.CompareTag("PostIt"))
-            {
-                if (Warp_OutPoint != null && OutisinStage)
-                {
-                    WarpObject(root);
-                }
-                else
-                {
-                    // プレイヤー死亡処理
-                }
-            }
-            else
-            {
-                // PostItだけでもワープ
-                //if (Warp_OutPoint != null && OutisinStage)
-                //{
-                //    WarpObject(other.transform);
-                //}
-            }
-        }
-        else if (other.CompareTag("Player")) // プレイヤー
-        {
-            if (Warp_OutPoint != null && OutisinStage)
-            {
-                WarpObject(other.transform);
-            }
-            else
-            {
-                // プレイヤー死亡処理
-            }
+            warpedObjects.Remove(obj); // 離れたら再ワープ可能に
         }
     }
 
-    //最上位の親を見つける関数
+    private void WarpToDestination(Transform obj)
+    {
+        obj.position = warpOutPoint.position;
+        warpedObjects.Add(obj.gameObject);
+
+        // 出口側のWarpにも登録しておく（即戻り防止）
+        Warp outWarp = warpOutPoint.GetComponent<Warp>();
+        if (outWarp != null)
+        {
+            outWarp.warpedObjects.Add(obj.gameObject);
+        }
+    }
+
     private Transform FindRootObject(Transform obj)
     {
         Transform root = obj;
@@ -104,25 +58,13 @@ public class Warp : MonoBehaviour
         return root;
     }
 
-    //ワープさせる関数
-    private void WarpObject(Transform obj)
+    private bool IsWarpValid(Transform obj)
     {
-        obj.position = Warp_OutPoint.position;
-
-        WarpedList.Add(obj.gameObject);
-        foreach (Transform child in obj)
-        {
-            AddAllChildrenToWarpedList(child);
-        }
+        return obj.CompareTag("Player") || obj.CompareTag("PostIt") || obj.CompareTag("Attachable");
     }
 
-    //子オブジェクトを再帰的にWarpedListに追加する
-    private void AddAllChildrenToWarpedList(Transform obj)
+    private bool IsInStage(Vector3 pos)
     {
-        WarpedList.Add(obj.gameObject);
-        foreach (Transform child in obj)
-        {
-            AddAllChildrenToWarpedList(child);
-        }
+        return pos.x > minX && pos.x < maxX && pos.y > minY;
     }
 }

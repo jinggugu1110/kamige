@@ -22,9 +22,9 @@ public class StarCoin : MonoBehaviour
     {
         Transform root = FindRootObject(other.transform);
 
-        if (other.CompareTag("PostIt") || other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            if (root.CompareTag("Player") || root.CompareTag("PostIt"))
+            if (root.CompareTag("Player"))
             {
                 isGetcoin = true;
                 gameObject.SetActive(false);
