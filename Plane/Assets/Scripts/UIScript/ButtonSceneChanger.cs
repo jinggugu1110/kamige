@@ -17,6 +17,7 @@ public class ButtonSceneChanger : MonoBehaviour
 
     public void RetryScene()
     {
+        Debug.Log("RetryScene‚ª‰Ÿ‚³‚ê‚½");
         Time.timeScale = 1f; // ˆê’â~‰ğœ
         UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);

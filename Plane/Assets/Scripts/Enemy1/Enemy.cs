@@ -2,10 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /*課題 
  * 移動処理　
@@ -108,7 +105,7 @@ public class Enemy : MonoBehaviour
         //Gap = Mathf.RoundToInt((bodyWidth * (4f / 5f)) / stepPerFrame);
         Gap = Mathf.RoundToInt(bodyWidth/ stepPerFrame);
 
-        BodyVec = new List<E_pos>();
+        //BodyVec = new List<E_pos>();
 
         if (BodyParts.Count > 0)
         {

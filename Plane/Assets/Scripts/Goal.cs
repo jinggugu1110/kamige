@@ -7,7 +7,8 @@ public class Goal : MonoBehaviour
 {
     public Transform player;
     private Rigidbody2D targetRb;
-    [Header("リザルトパネル")] public GameObject panel;
+    [Header("リザルトパネル")] 
+    public GameObject panel;
 
     private void Start()
     {
