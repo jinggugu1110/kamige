@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class StarCoin : MonoBehaviour
 {
     public bool isGetcoin = false;//PlayerÇ™ÉRÉCÉìÇ…êGÇÍÇΩÇÁtrue
-    private bool playerisexist = false;
+    //private bool playerisexist = false;
 
     private void Start()
     {
@@ -22,9 +22,9 @@ public class StarCoin : MonoBehaviour
     {
         Transform root = FindRootObject(other.transform);
 
-        if (other.CompareTag("PostIt") || other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            if (root.CompareTag("Player") || root.CompareTag("PostIt"))
+            if (root.CompareTag("Player"))
             {
                 isGetcoin = true;
                 gameObject.SetActive(false);

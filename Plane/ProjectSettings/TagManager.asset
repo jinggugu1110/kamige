@@ -12,6 +12,8 @@ TagManager:
   - conflictPostIt
   - nonconflictPostIt
   - grass
+  - Enemy
+  - Poyo
   layers:
   - Default
   - TransparentFX
@@ -22,9 +24,9 @@ TagManager:
   - PostIt
   - Ground
   - Grass
-  - 
-  - 
-  - 
+  - PlayerJump
+  - Enemy
+  - poyoArea
   - 
   - 
   - 
@@ -51,6 +53,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 1838560243
+    locked: 0
+  - name: po
+    uniqueID: 570370161
     locked: 0
   - name: PostIt
     uniqueID: 1626863907

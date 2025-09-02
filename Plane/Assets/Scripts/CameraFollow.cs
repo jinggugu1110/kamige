@@ -17,4 +17,10 @@ public class CameraFollow : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
         }
     }
+ 
+    // 追従先を切り替えるメソッドを新規追加
+    public void SetTarget(Transform newTarget)
+    {
+        player = newTarget;
+    }
 }
